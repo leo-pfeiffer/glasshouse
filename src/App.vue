@@ -1,28 +1,73 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+
+    <Navbar logo="logo.png"/>
+
+    <section class="hero is-info is-medium is-bold">
+      <div class="hero-body">
+        <div class="container has-text-centered">
+          <h1 class="title">My life in data.</h1>
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
+      <section class="articles">
+        <div class="column is-8 is-offset-2">
+          <Article
+              title="Spotify"
+              content="Bla bla bla I listen to Spotify all day"
+              img="spotify.png"
+          />
+
+          <Article
+              title="Apple Fitness"
+              content="Track my fitness levels and get jealous"
+              img="applefitness.png"
+          />
+
+          <Article
+              title="WakaTime"
+              content="Taking over the world with code"
+              img="wakatime.png"
+          />
+        </div>
+      </section>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Article from "@/components/Article";
+import Navbar from "@/components/Navbar";
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Navbar,
+    Article
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+
+.hero-body
+{background-image: url(./assets/gradient.jpeg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 400px;
 }
+
+
+.articles {
+  margin: -200px 0 5rem;
+}
+
+div.column.is-8:first-child {
+  padding-top: 0;
+  margin-top: 0;
+}
+
 </style>

@@ -10,22 +10,63 @@
         </div>
       </div>
       <div class="content article-body">
-        {{ content }}
+      {{ content }}
         <Graph/>
-      </div>
+        </div>
+        <div class="hooper-wrapper">
+          <hooper :settings="hooperSettings">
+            <slide>
+                <div class="box slider-box">
+                  <Graph/>
+                </div>
+            </slide>
+            <slide>
+                <div class="box slider-box">
+                  I'm in a box.
+                </div>
+            </slide>
+            <slide>
+                <div class="box slider-box">
+                  Another one.
+                </div>
+            </slide>
+            <hooper-navigation slot="hooper-addons"></hooper-navigation>
+          </hooper>
+
+        </div>
     </div>
   </div>
 </template>
 
 <script>
 import Graph from "@/components/Graph";
+import {
+  Hooper,
+  Slide,
+  Navigation as HooperNavigation
+} from 'hooper';
+import 'hooper/dist/hooper.css';
+
 export default {
   name: "Article",
-  components: {Graph},
+  components: {
+    Graph,
+    Hooper,
+    Slide,
+    HooperNavigation
+  },
   props: {
     title: String,
     content: String,
     img: String
+  },
+  data() {
+    return {
+      hooperSettings: {
+        itemsToShow: 2,
+        centerMode: true,
+      }
+    };
   }
 }
 </script>
@@ -37,7 +78,7 @@ export default {
   margin: 15px 0;
 }
 
-.article, .promo-block {
+.article {
   margin-top: 6rem;
 }
 
@@ -73,5 +114,16 @@ export default {
 .media-content {
   margin-top: 1rem;
 }
+
+.hooper-wrapper {
+  margin-top: 30px;
+}
+
+.slider-box {
+  height: 90%;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
 
 </style>

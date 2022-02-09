@@ -62,13 +62,12 @@ export default {
 }
 
 #my-chart .column {
-  height: 200px;
-  //max-width: 300px;
+  height: 100px;
   margin: 0 auto;
 }
 
 @keyframes gradient-animation {
-  0%   { background-position:   0%; }
+  0%   { background-position:   0; }
   100% { background-position: 100%; }
 }
 </style>

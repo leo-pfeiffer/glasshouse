@@ -23,7 +23,7 @@
 
           <Article
               title="Apple Fitness"
-              content="Track my fitness levels and get jealous"
+              content="Workouts from the last 14 days."
               img="applefitness.png"
               type="fitness"
           />

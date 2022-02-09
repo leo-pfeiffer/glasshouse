@@ -12,9 +12,7 @@
       <WakaTime v-if="type==='wakatime'" :content="content"/>
       <Fitness v-else-if="type==='fitness'" :content="content"/>
       <Spotify v-else-if="type==='spotify'" :content="content"/>
-      <div class="content article-body" v-else>
-        {{ content }}
-      </div>
+      <div class="content article-body" v-else>{{ content }}</div>
     </div>
   </div>
 </template>
@@ -60,6 +58,7 @@ export default {
 .article-body {
   line-height: 1.4;
   margin: 0 3rem;
+  text-align: center;
 }
 
 .author-image {

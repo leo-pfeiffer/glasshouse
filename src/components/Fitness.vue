@@ -1,45 +1,48 @@
 <template>
-<div class="content article-body">
-  {{ content }}
-  <Graph style="margin-top: 30px;"
-         :x="'Workouts'"
-         :y="'Proportion'"
-         :x-series="workoutTypes"
-         :y-series="workoutProportions"
-         :show-labels="false"
-         :show-data="false"
-         :chart-type="'column'"
-  />
-  <div class="hooper-wrapper">
-    <hooper :settings="hooperSettings" style="height: 100%">
-      <slide v-for="w in workouts" v-bind:key="w.start">
-        <div class="box slider-box">
-          <div class="columns is-multiline">
+  <div class="content article-body">
+    <div class="content article-subtitle">
+      {{ content }}
+    </div>
+    <div class="columns is-vcentered">
+      <div class="column is-half">
+        <vue-c3 :handler="handler"></vue-c3>
+      </div>
+      <div class="column is-half">
+        Hello world
+      </div>
+    </div>
+    <div class="hooper-wrapper">
+      <hooper :settings="hooperSettings" style="height: 100%">
+        <slide v-for="w in workouts" v-bind:key="w.start">
+          <div class="box slider-box">
+            <div class="columns is-multiline">
 
-            <div class="column is-full">
-              <div class="box inner-box">
-                <Graph/>
+              <div class="column is-full">
+                <div class="box inner-box">
+                  <Graph/>
+                </div>
               </div>
-            </div>
 
-            <div class="column is-full">
-              <div class="box inner-box desc-box">
-                {{ w.name }}
+              <div class="column is-full">
+                <div class="box inner-box desc-box">
+                  {{ w.name }}
+                </div>
               </div>
-            </div>
 
+            </div>
           </div>
-        </div>
-      </slide>
-      <hooper-navigation slot="hooper-addons"></hooper-navigation>
-    </hooper>
+        </slide>
+        <hooper-navigation slot="hooper-addons"></hooper-navigation>
+      </hooper>
+    </div>
   </div>
-</div>
 
 </template>
 
 <script>
 import Graph from "@/components/Graph";
+import Vue from 'vue'
+import VueC3 from 'vue-c3'
 import {
   Hooper,
   Slide,
@@ -54,7 +57,8 @@ export default {
     Hooper,
     Slide,
     HooperNavigation,
-    Graph
+    Graph,
+    VueC3
   },
   props: {
     content: String
@@ -68,7 +72,8 @@ export default {
       workouts: [],
       proportions: {},
       workoutTypes: [],
-      workoutProportions: []
+      workoutProportions: [],
+      handler: new Vue()
     };
   },
   created() {
@@ -92,13 +97,35 @@ export default {
       }
       return props
     }
+  },
+  mounted() {
+    // to init the graph call:
+    const options = {
+      size: {
+        height: 200,
+        // width: 300
+      },
+      data: {
+        columns: Object.entries(this.proportions),
+        type: 'pie',
+      },
+      color: {
+        pattern: ["#ffadad", "#ffd6a5", "#fdffb6", "#caffbf", "#9bf6ff", "#a0c4ff", "#bdb2ff", "#ffc6ff", "#fffffc"]
+      },
+      pie: {
+        label: {
+          show: false
+        }
+      }
+    }
+    this.handler.$emit('init', options)
   }
 }
 </script>
 
 <style scoped>
 .hooper-wrapper {
-  //margin-top: 30px;
+//margin-top: 30px;
 }
 
 .slider-box {

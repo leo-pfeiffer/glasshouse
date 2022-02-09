@@ -52,6 +52,33 @@ const retrieve = function () {
     }]
 }
 
+const diffMins = function (date1, date2) {
+    const diffMs = date2 - date1
+    return Math.round(((diffMs % 86400000) % 3600000) / 60000);
+}
+
+const getWorkoutProportions = function(workouts) {
+    const total = getTotalWorkoutTime(workouts)
+    return workouts.reduce((acc, curr) => {
+        const duration = Math.floor((getWorkoutDuration(curr) / total) * 100) / 100;
+        return acc[curr.name] ? acc[curr.name] += duration : acc[curr.name] = duration, acc
+    }, {});
+}
+
+const getWorkoutDuration = function(workout) {
+    const start = new Date(workout.start)
+    const end = new Date(workout.end)
+    return diffMins(start, end)
+}
+
+const getTotalWorkoutTime = function(workouts) {
+    return workouts.reduce((a, b) => {
+        return a + getWorkoutDuration(b)
+    }, 0);
+}
+
 module.exports = {
-    retrieve
+    retrieve,
+    getWorkoutProportions,
+    getTotalWorkoutTime
 }

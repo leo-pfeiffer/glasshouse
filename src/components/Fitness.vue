@@ -1,10 +1,18 @@
 <template>
 <div class="content article-body">
   {{ content }}
-  <Graph style="margin-top: 30px;"/>
+  <Graph style="margin-top: 30px;"
+         :x="'Workouts'"
+         :y="'Proportion'"
+         :x-series="workoutTypes"
+         :y-series="workoutProportions"
+         :show-labels="false"
+         :show-data="false"
+         :chart-type="'column'"
+  />
   <div class="hooper-wrapper">
     <hooper :settings="hooperSettings" style="height: 100%">
-      <slide v-for="w in workouts" v-bind:key="w">
+      <slide v-for="w in workouts" v-bind:key="w.start">
         <div class="box slider-box">
           <div class="columns is-multiline">
 
@@ -19,8 +27,6 @@
                 {{ w.name }}
               </div>
             </div>
-
-
 
           </div>
         </div>
@@ -58,11 +64,34 @@ export default {
       hooperSettings: {
         itemsToShow: 1.5,
         centerMode: false,
-      }
+      },
+      workouts: [],
+      proportions: {},
+      workoutTypes: [],
+      workoutProportions: []
     };
   },
-  computed: {
-    workouts: () => fitness.retrieve()
+  created() {
+    this.workouts = fitness.retrieve();
+    this.proportions = fitness.getWorkoutProportions(this.workouts);
+    this.workoutTypes = this.getWorkoutTypes(this.proportions);
+    this.workoutProportions = this.getWorkoutProportions(this.proportions);
+  },
+  methods: {
+    getWorkoutTypes: (proportions) => {
+      const types = []
+      for (let type in proportions) {
+        types.push(type)
+      }
+      return types
+    },
+    getWorkoutProportions: (proportions) => {
+      const props = []
+      for (let type in proportions) {
+        props.push(proportions[type])
+      }
+      return props
+    }
   }
 }
 </script>

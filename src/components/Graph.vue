@@ -1,7 +1,7 @@
 <template>
 
   <div id="my-chart">
-    <table id="animations-example-6" class="charts-css column hide-data data-spacing-5 show-primary-axis">
+    <table id="animations-example-6" class="charts-css column hide-data data-spacing-1 show-primary-axis">
       <!--    show-labels-->
       <thead>
       <tr>
@@ -55,10 +55,6 @@ export default {
   );
   background-size: 600%;
   animation: gradient-animation 3s linear infinite alternate;
-}
-
-#my-chart {
-  margin-top: 30px;
 }
 
 #my-chart .column {

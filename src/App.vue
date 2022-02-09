@@ -18,18 +18,21 @@
               title="Spotify"
               content="Bla bla bla I listen to Spotify all day"
               img="spotify.png"
+              type="spotify"
           />
 
           <Article
               title="Apple Fitness"
               content="Track my fitness levels and get jealous"
               img="applefitness.png"
+              type="fitness"
           />
 
           <Article
               title="WakaTime"
               content="Taking over the world with code"
               img="wakatime.png"
+              type="wakatime"
           />
         </div>
       </section>

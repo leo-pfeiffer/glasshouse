@@ -9,65 +9,34 @@
           <p class="title article-title">{{ title }}</p>
         </div>
       </div>
-      <div class="content article-body">
-      {{ content }}
-        <Graph/>
-        </div>
-        <div class="hooper-wrapper">
-          <hooper :settings="hooperSettings">
-            <slide>
-                <div class="box slider-box">
-                  <Graph/>
-                </div>
-            </slide>
-            <slide>
-                <div class="box slider-box">
-                  I'm in a box.
-                </div>
-            </slide>
-            <slide>
-                <div class="box slider-box">
-                  Another one.
-                </div>
-            </slide>
-            <hooper-navigation slot="hooper-addons"></hooper-navigation>
-          </hooper>
-
-        </div>
+      <WakaTime v-if="type==='wakatime'" :content="content"/>
+      <Fitness v-else-if="type==='fitness'" :content="content"/>
+      <Spotify v-else-if="type==='spotify'" :content="content"/>
+      <div class="content article-body" v-else>
+        {{ content }}
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import Graph from "@/components/Graph";
-import {
-  Hooper,
-  Slide,
-  Navigation as HooperNavigation
-} from 'hooper';
-import 'hooper/dist/hooper.css';
+import Fitness from "@/components/Fitness";
+import WakaTime from "@/components/WakaTime";
+import Spotify from "@/components/Spotify";
 
 export default {
   name: "Article",
   components: {
-    Graph,
-    Hooper,
-    Slide,
-    HooperNavigation
+    Spotify,
+    WakaTime,
+    Fitness,
   },
   props: {
     title: String,
     content: String,
-    img: String
+    img: String,
+    type: String
   },
-  data() {
-    return {
-      hooperSettings: {
-        itemsToShow: 2,
-        centerMode: true,
-      }
-    };
-  }
 }
 </script>
 
@@ -87,13 +56,10 @@ export default {
   font-weight: lighter;
   line-height: 2;
 }
-.article-subtitle {
-  color: #909AA0;
-  margin-bottom: 3rem;
-}
+
 .article-body {
   line-height: 1.4;
-  margin: 0 6rem;
+  margin: 0 3rem;
 }
 
 .author-image {
@@ -111,19 +77,13 @@ export default {
   display: block;
   margin-bottom: 1rem;
 }
+
 .media-content {
   margin-top: 1rem;
 }
 
-.hooper-wrapper {
-  margin-top: 30px;
+.card-content {
+  padding: 1.5rem 0;
 }
-
-.slider-box {
-  height: 90%;
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
 
 </style>

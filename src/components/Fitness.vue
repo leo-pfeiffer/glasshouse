@@ -38,7 +38,7 @@
           <div class="box slider-box">
 
                   <p class="title is-6">{{ w.name }}</p>
-                  <p class="subtitle is-6">{{ getDate(new Date(w.start)) }}</p>
+                  <p class="subtitle is-6">{{ getDate(w.start) }}</p>
 
                   <table class="table is-striped">
                     <tbody>
@@ -79,7 +79,7 @@ import fitness from "@/api/fitness";
 import ColorScheme from 'color-scheme';
 import moment from "moment";
 
-const scheme = new ColorScheme;
+const scheme = new ColorScheme();
 scheme.from_hex('4389A2').scheme('contrast');
 
 export default {
@@ -135,7 +135,7 @@ export default {
       const m = Math.pow(10, d)
       return Math.floor(num * m) / m;
     },
-    getDate: (date) => moment(date).format("DD-MMM-YYY"),
+    getDate: (date) => moment(date).format("DD-MMM-YYYY"),
   },
   mounted() {
     // to init the graph call:

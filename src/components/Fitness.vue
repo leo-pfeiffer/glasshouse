@@ -50,6 +50,11 @@ import {
 } from 'hooper';
 import 'hooper/dist/hooper.css';
 import fitness from "@/api/fitness";
+import ColorScheme from 'color-scheme';
+
+const scheme = new ColorScheme;
+scheme.from_hue(21).scheme('contrast');
+console.log(scheme.colors().map(e => '#' + e))
 
 export default {
   name: "Fitness",
@@ -110,7 +115,7 @@ export default {
         type: 'pie',
       },
       color: {
-        pattern: ["#ffadad", "#ffd6a5", "#fdffb6", "#caffbf", "#9bf6ff", "#a0c4ff", "#bdb2ff", "#ffc6ff", "#fffffc"]
+        pattern: scheme.colors().map(e => '#' + e)
       },
       pie: {
         label: {

@@ -10,6 +10,7 @@
   "dependencies": {
     "c3": "^0.7.20",
     "charts.css": "^0.9.0",
+    "color-scheme": "^1.0.1",
     "core-js": "^3.6.5",
     "hooper": "^0.3.4",
     "vue": "^2.6.11",

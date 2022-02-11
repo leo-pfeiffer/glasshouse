@@ -9,7 +9,23 @@
       </div>
       <div class="tile is-parent">
         <article class="tile is-child box">
-          <p class="title">Past 14 days</p>
+          <div class="level is-mobile">
+            <div class="level-item has-text-centered">
+              <button class="button is-primary is-normal"
+                      v-bind:class="{'is-outlined': buttonActive[0]}"
+                      @click="() => {update(7); toggleButton(0)}">7D</button>
+            </div>
+            <div class="level-item has-text-centered">
+              <button class="button is-primary is-normal"
+                      v-bind:class="{'is-outlined': buttonActive[1]}"
+                      @click="() => {update(14); toggleButton(1)}">14D</button>
+            </div>
+            <div class="level-item has-text-centered">
+              <button class="button is-primary is-normal"
+                      v-bind:class="{'is-outlined': buttonActive[2]}"
+                      @click="() => {update(30); toggleButton(2)}">1M</button>
+            </div>
+          </div>
 
           <table class="table is-striped">
             <tbody>
@@ -100,67 +116,77 @@ export default {
         centerMode: false,
       },
       workouts: [],
-      proportions: {},
-      workoutTypes: [],
-      workoutProportions: [],
       handler: new Vue(),
-      totalWorkoutTime: 0,
-      maxBPM: 0
+      buttonActive: [true, true, false]
     };
   },
+  computed: {
+    proportions: function () {
+      return fitness.getWorkoutProportions(this.workouts);
+    },
+    totalWorkoutTime: function () {
+      return fitness.getTotalWorkoutTime(this.workouts)
+    },
+    maxBPM: function () {
+      return fitness.getMaxBPM(this.workouts)
+    },
+  },
   created() {
-    this.workouts = fitness.retrieve();
-    this.proportions = fitness.getWorkoutProportions(this.workouts);
-    this.workoutTypes = this.getWorkoutTypes(this.proportions);
-    this.workoutProportions = this.getWorkoutProportions(this.proportions);
-    this.totalWorkoutTime = fitness.getTotalWorkoutTime(this.workouts);
-    this.maxBPM = fitness.getMaxBPM(this.workouts);
+    this.update(30)
   },
   methods: {
-    getWorkoutTypes: (proportions) => {
-      const types = []
-      for (let type in proportions) {
-        types.push(type)
+    update: function (days) {
+      const newWorkouts = fitness.retrieve(days)
+      while (this.workouts.length !== 0) {
+        this.workouts.pop()
       }
-      return types
-    },
-    getWorkoutProportions: (proportions) => {
-      const props = []
-      for (let type in proportions) {
-        props.push(proportions[type])
+      for (let w of newWorkouts) {
+        this.workouts.push(w)
       }
-      return props
+      this.makeChart();
     },
-    round: (num, d) => {
+    toggleButton: function(idx) {
+      this.buttonActive = this.buttonActive.map(() => true)
+      this.buttonActive[idx] = false
+    },
+    round: function (num, d) {
       const m = Math.pow(10, d)
       return Math.floor(num * m) / m;
     },
-    getDate: (date) => moment(date).format("DD-MMM-YYYY"),
+    getDate: function (date) {
+      return moment(date).format("DD-MMM-YYYY")
+    },
+    makeChart: function() {
+      const options = {
+        size: {
+          height: 200,
+        },
+        data: {
+          columns: Object.entries(this.proportions),
+          type: 'donut',
+          empty: {
+            label: {
+              text: "No Data Available"
+            }
+          }
+        },
+        color: {
+          pattern: scheme.colors().map(e => '#' + e)
+        },
+        donut: {
+          label: {
+            show: false,
+          },
+        },
+        legend: {
+          show: true
+        },
+      }
+      this.handler.$emit('init', options);
+    }
   },
   mounted() {
-    // to init the graph call:
-    const options = {
-      size: {
-        height: 200,
-        // width: 300
-      },
-      data: {
-        columns: Object.entries(this.proportions),
-        type: 'donut',
-      },
-      color: {
-        pattern: scheme.colors().map(e => '#' + e)
-      },
-      donut: {
-        label: {
-          show: false,
-        },
-      },
-      legend: {
-        show: true
-      }
-    }
-    this.handler.$emit('init', options);
+    this.makeChart();
   }
 }
 </script>

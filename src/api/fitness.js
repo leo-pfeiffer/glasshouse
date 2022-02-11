@@ -1,7 +1,7 @@
 const moment = require("moment");
 
-const retrieve = function () {
-    const arr = [{
+const retrieve = function (days) {
+    let arr = [{
         "_id": "620285cd86097cb4c4b142da",
         "maxHeartRate": {"units": "bpm", "qty": 151},
         "avgHeartRate": {"units": "bpm", "qty": 127.83678343949036},
@@ -61,12 +61,13 @@ const retrieve = function () {
 
     arr.sort((a, b) => a.start < b.start ? 1 : -1)
 
+    arr = arr.filter(e => moment(new Date()).diff(moment(e.start), 'days') < days)
+
     return arr;
 }
 
 const diffMins = function (date1, date2) {
     const diffMs = date2 - date1
-    console.log(date1, date2, diffMs)
     return Math.round(((diffMs % 86400000) % 3600000) / 60000);
 }
 

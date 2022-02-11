@@ -1,3 +1,5 @@
+const moment = require("moment");
+
 const retrieve = function () {
     const arr = [{
         "_id": "620285cd86097cb4c4b142da",
@@ -52,6 +54,8 @@ const retrieve = function () {
     }]
 
     for (let w of arr) {
+        w['start'] = moment(w.start, "YYYY-MM-DD hh:mm:ss Z").toDate(),
+        w['end'] = moment(w.end, "YYYY-MM-DD hh:mm:ss Z").toDate();
         w['duration'] = getWorkoutDuration(w)
     }
 
@@ -60,6 +64,7 @@ const retrieve = function () {
 
 const diffMins = function (date1, date2) {
     const diffMs = date2 - date1
+    console.log(date1, date2, diffMs)
     return Math.round(((diffMs % 86400000) % 3600000) / 60000);
 }
 
@@ -72,9 +77,7 @@ const getWorkoutProportions = function(workouts) {
 }
 
 const getWorkoutDuration = function(workout) {
-    const start = new Date(workout.start)
-    const end = new Date(workout.end)
-    return diffMins(start, end)
+    return diffMins(workout.start, workout.end)
 }
 
 const getTotalWorkoutTime = function(workouts) {

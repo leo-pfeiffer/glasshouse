@@ -34,7 +34,7 @@
 
     <div class="hooper-wrapper">
       <hooper :settings="hooperSettings" style="height: 100%">
-        <slide v-for="w in workouts" v-bind:key="w.start">
+        <slide v-for="w in workouts" v-bind:key="w.start.toString()">
           <div class="box slider-box">
 
                   <p class="title is-6">{{ w.name }}</p>
@@ -75,9 +75,9 @@ import {
   Navigation as HooperNavigation
 } from 'hooper';
 import 'hooper/dist/hooper.css';
-import {getDate} from "@/utils";
 import fitness from "@/api/fitness";
 import ColorScheme from 'color-scheme';
+import moment from "moment";
 
 const scheme = new ColorScheme;
 scheme.from_hex('4389A2').scheme('contrast');
@@ -135,7 +135,7 @@ export default {
       const m = Math.pow(10, d)
       return Math.floor(num * m) / m;
     },
-    getDate: (date) => getDate(date),
+    getDate: (date) => moment(date).format("DD-MMM-YYY"),
   },
   mounted() {
     // to init the graph call:

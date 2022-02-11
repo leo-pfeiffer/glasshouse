@@ -54,10 +54,12 @@ const retrieve = function () {
     }]
 
     for (let w of arr) {
-        w['start'] = moment(w.start, "YYYY-MM-DD hh:mm:ss Z").toDate(),
+        w['start'] = moment(w.start, "YYYY-MM-DD hh:mm:ss Z").toDate();
         w['end'] = moment(w.end, "YYYY-MM-DD hh:mm:ss Z").toDate();
         w['duration'] = getWorkoutDuration(w)
     }
+
+    arr.sort((a, b) => a.start < b.start ? 1 : -1)
 
     return arr;
 }
@@ -72,7 +74,8 @@ const getWorkoutProportions = function(workouts) {
     const total = getTotalWorkoutTime(workouts)
     return workouts.reduce((acc, curr) => {
         const duration = Math.floor((getWorkoutDuration(curr) / total) * 100) / 100;
-        return acc[curr.name] ? acc[curr.name] += duration : acc[curr.name] = duration, acc
+        acc[curr.name] ? acc[curr.name] += duration : acc[curr.name] = duration
+        return acc
     }, {});
 }
 

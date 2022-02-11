@@ -83,8 +83,13 @@ const getTotalWorkoutTime = function(workouts) {
     }, 0);
 }
 
+const getMaxBPM = function(workouts) {
+    return workouts.reduce((a, b) => b.maxHeartRate.qty > a ? b.maxHeartRate.qty : a, 0)
+}
+
 module.exports = {
     retrieve,
     getWorkoutProportions,
-    getTotalWorkoutTime
+    getTotalWorkoutTime,
+    getMaxBPM
 }

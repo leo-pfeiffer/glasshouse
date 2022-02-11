@@ -1,55 +1,62 @@
 <template>
   <div class="content article-body">
-    <div class="content article-subtitle">
-      {{ content }}
-    </div>
-    <div class="columns is-vcentered">
-      <div class="column is-half">
-        <vue-c3 :handler="handler"></vue-c3>
+
+    <div class="tile is-ancestor">
+      <div class="tile is-parent">
+        <article class="tile is-child box">
+          <vue-c3 :handler="handler" id="chart"></vue-c3>
+        </article>
       </div>
-      <div class="column is-half">
-        Hello world
+      <div class="tile is-parent">
+        <article class="tile is-child box">
+          <p class="title">Past 14 days</p>
+
+          <table class="table is-striped">
+            <tbody>
+            <tr>
+              <td># Workouts</td>
+              <td>{{ workouts.length }}</td>
+            </tr>
+            <tr>
+              <td>Total Time (min)</td>
+              <td>{{ totalWorkoutTime }}</td>
+            </tr>
+            <tr>
+              <td>Max Heart Rate</td>
+              <td>{{ maxBPM }}</td>
+            </tr>
+            </tbody>
+          </table>
+
+        </article>
       </div>
     </div>
+
     <div class="hooper-wrapper">
       <hooper :settings="hooperSettings" style="height: 100%">
         <slide v-for="w in workouts" v-bind:key="w.start">
           <div class="box slider-box">
-            <div class="columns is-multiline">
 
-              <div class="column is-full">
-                <div class="box inner-box">
+                  <p class="title is-6">{{ w.name }}</p>
+                  <p class="subtitle is-6">{{ getDate(new Date(w.start)) }}</p>
 
-                  <div class="tile is-ancestor is-vertical">
-                    <div class="tile">
-                      <div class="columns">
-                        <div class="column">Min</div>
-                        <div class="column">{{ w.duration }}</div>
-                      </div>
-                    </div>
-                    <div class="tile">
-                      <div class="columns">
-                        <div class="column">BPM</div>
-                        <div class="column">{{ round(w.avgHeartRate.qty, 0) }}</div>
-                      </div>
-                    </div>
-                    <div class="tile">
-                      <div class="columns">
-                        <div class="column">MET</div>
-                        <div class="column">{{ round(w.intensity.qty, 0) }}</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                  <table class="table is-striped">
+                    <tbody>
+                    <tr>
+                      <td>Min</td>
+                      <td>{{ w.duration }}</td>
+                    </tr>
+                    <tr>
+                      <td>BPM</td>
+                      <td>{{ round(w.avgHeartRate.qty, 0) }}</td>
+                    </tr>
+                    <tr>
+                      <td>MET</td>
+                      <td>{{ round(w.intensity.qty, 1) }}</td>
+                    </tr>
+                    </tbody>
+                  </table>
 
-              <div class="column is-full">
-                <div class="box inner-box desc-box">
-                  {{ w.name }}
-                </div>
-              </div>
-
-            </div>
           </div>
         </slide>
         <hooper-navigation slot="hooper-addons"></hooper-navigation>
@@ -68,12 +75,12 @@ import {
   Navigation as HooperNavigation
 } from 'hooper';
 import 'hooper/dist/hooper.css';
+import {getDate} from "@/utils";
 import fitness from "@/api/fitness";
 import ColorScheme from 'color-scheme';
 
 const scheme = new ColorScheme;
-scheme.from_hue(21).scheme('contrast');
-console.log(scheme.colors().map(e => '#' + e))
+scheme.from_hex('4389A2').scheme('contrast');
 
 export default {
   name: "Fitness",
@@ -96,7 +103,9 @@ export default {
       proportions: {},
       workoutTypes: [],
       workoutProportions: [],
-      handler: new Vue()
+      handler: new Vue(),
+      totalWorkoutTime: 0,
+      maxBPM: 0
     };
   },
   created() {
@@ -104,6 +113,8 @@ export default {
     this.proportions = fitness.getWorkoutProportions(this.workouts);
     this.workoutTypes = this.getWorkoutTypes(this.proportions);
     this.workoutProportions = this.getWorkoutProportions(this.proportions);
+    this.totalWorkoutTime = fitness.getTotalWorkoutTime(this.workouts);
+    this.maxBPM = fitness.getMaxBPM(this.workouts);
   },
   methods: {
     getWorkoutTypes: (proportions) => {
@@ -123,7 +134,8 @@ export default {
     round: (num, d) => {
       const m = Math.pow(10, d)
       return Math.floor(num * m) / m;
-    }
+    },
+    getDate: (date) => getDate(date),
   },
   mounted() {
     // to init the graph call:
@@ -134,26 +146,26 @@ export default {
       },
       data: {
         columns: Object.entries(this.proportions),
-        type: 'pie',
+        type: 'donut',
       },
       color: {
         pattern: scheme.colors().map(e => '#' + e)
       },
-      pie: {
+      donut: {
         label: {
-          show: false
-        }
+          show: false,
+        },
+      },
+      legend: {
+        show: true
       }
     }
-    this.handler.$emit('init', options)
+    this.handler.$emit('init', options);
   }
 }
 </script>
 
 <style scoped>
-.hooper-wrapper {
-//margin-top: 30px;
-}
 
 .slider-box {
   height: 90%;
@@ -161,13 +173,5 @@ export default {
   margin-right: 0.5em;
 }
 
-.inner-box {
-  word-wrap: break-word;
-}
-
-.desc-box {
-  padding: 0.5rem;
-  font-size: 12px;
-}
 
 </style>

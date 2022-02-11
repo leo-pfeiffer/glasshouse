@@ -1,5 +1,5 @@
 const retrieve = function () {
-    return [{
+    const arr = [{
         "_id": "620285cd86097cb4c4b142da",
         "maxHeartRate": {"units": "bpm", "qty": 151},
         "avgHeartRate": {"units": "bpm", "qty": 127.83678343949036},
@@ -50,6 +50,12 @@ const retrieve = function () {
         "name": "Core Training",
         "intensity": {"qty": 5.961622451710051, "units": "MET"}
     }]
+
+    for (let w of arr) {
+        w['duration'] = getWorkoutDuration(w)
+    }
+
+    return arr;
 }
 
 const diffMins = function (date1, date2) {

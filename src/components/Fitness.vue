@@ -19,7 +19,27 @@
 
               <div class="column is-full">
                 <div class="box inner-box">
-                  <Graph/>
+
+                  <div class="tile is-ancestor is-vertical">
+                    <div class="tile">
+                      <div class="columns">
+                        <div class="column">Min</div>
+                        <div class="column">{{ w.duration }}</div>
+                      </div>
+                    </div>
+                    <div class="tile">
+                      <div class="columns">
+                        <div class="column">BPM</div>
+                        <div class="column">{{ round(w.avgHeartRate.qty, 0) }}</div>
+                      </div>
+                    </div>
+                    <div class="tile">
+                      <div class="columns">
+                        <div class="column">MET</div>
+                        <div class="column">{{ round(w.intensity.qty, 0) }}</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -40,7 +60,6 @@
 </template>
 
 <script>
-import Graph from "@/components/Graph";
 import Vue from 'vue'
 import VueC3 from 'vue-c3'
 import {
@@ -62,7 +81,6 @@ export default {
     Hooper,
     Slide,
     HooperNavigation,
-    Graph,
     VueC3
   },
   props: {
@@ -101,6 +119,10 @@ export default {
         props.push(proportions[type])
       }
       return props
+    },
+    round: (num, d) => {
+      const m = Math.pow(10, d)
+      return Math.floor(num * m) / m;
     }
   },
   mounted() {

@@ -66,6 +66,10 @@ export default {
   font-size: 12px;
 }
 
+#my-chart {
+  width: 100%
+}
+
 #my-chart .column {
   height: 100px;
   margin: 0 auto;

@@ -96,7 +96,7 @@ import ColorScheme from 'color-scheme';
 import moment from "moment";
 
 const scheme = new ColorScheme();
-scheme.from_hex('4389A2').scheme('contrast');
+scheme.from_hex('000cff').scheme('contrast');
 
 export default {
   name: "Fitness",

@@ -1,6 +1,6 @@
 <template>
   <div class="content article-body">
-    <nav class="level box">
+    <div class="level box">
       <div class="level-item has-text-centered">
         <div>
           <p class="heading">Period (dys)</p>
@@ -19,7 +19,7 @@
           <p class="title">{{ round(avgTime, 1) }}</p>
         </div>
       </div>
-    </nav>
+    </div>
     <div class="tile is-ancestor">
       <div class="tile is-parent">
         <article class="tile is-child box">

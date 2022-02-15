@@ -22,7 +22,8 @@ app.use('/api/v1/fitness-upload', authenticate, fitnessUploadRoute)
 app.use('/api/v1/fitness', fitnessRoute)
 app.use('/api/v1/wakatime', wakaTimeRoute)
 
-app.use('/api/v1/spotify', spotifyRoute.mainRouter)
+app.use('/api/v1/spotify/data', spotifyRoute.dataRouter)
+app.use('/api/v1/spotify/currently-playing', spotifyRoute.currentlyPlayingRouter)
 app.use('/api/v1/spotify/login', spotifyRoute.loginRouter)
 app.use('/api/v1/spotify/callback', spotifyRoute.callbackRouter)
 

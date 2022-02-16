@@ -22,7 +22,8 @@ jobs:
           DOT_ENV: ${{ secrets.ENV }}
         run: |
           chmod +x ./create-app-yml.sh
-          ./create-app-yml.sh "$($DOT_ENV | base64 --decode)"
+          ./create-app-yml.sh "$(echo $DOT_ENV | base64 --decode)"
+        shell: bash
         
       - id: 'deployment'
         uses: google-github-actions/deploy-appengine@v0.4.0

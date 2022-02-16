@@ -29,18 +29,14 @@
             <table class="table is-hoverable">
               <thead>
               <tr>
-                <th>One</th>
-                <th>Two</th>
+                <th>#</th>
+                <th>Artist</th>
               </tr>
               </thead>
               <tbody>
-              <tr>
-                <td>Three</td>
-                <td>Four</td>
-              </tr>
-              <tr>
-                <td>Five</td>
-                <td>Six</td>
+              <tr v-for="(artist, i) of topArtists" v-bind:key="i">
+                <td>{{ i + 1}}</td>
+                <td><a :href="artist.external_urls.spotify">{{ artist.name }}</a></td>
               </tr>
               </tbody>
             </table>
@@ -54,18 +50,14 @@
           <table class="table is-hoverable">
             <thead>
             <tr>
-              <th>One</th>
-              <th>Two</th>
+              <th>#</th>
+              <th>Track</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-              <td>Three</td>
-              <td>Four</td>
-            </tr>
-            <tr>
-              <td>Five</td>
-              <td>Six</td>
+            <tr v-for="(artist, i) of topTracks" v-bind:key="i">
+              <td>{{ i + 1 }}</td>
+              <td><a :href="artist.external_urls.spotify">{{ artist.name }}</a></td>
             </tr>
             </tbody>
           </table>
@@ -77,7 +69,7 @@
 
 <script>
 import SpotifyItem from "@/components/SpotifyItem";
-import {retrieve} from "@/api/spotify";
+import spotifyClient from "@/api/spotify";
 export default {
   name: "Spotify",
   props: {
@@ -95,13 +87,16 @@ export default {
     SpotifyItem
   },
   async created() {
-    const current = await retrieve();
+    const current = await spotifyClient.getCurrentlyPlaying();
     if (Object.keys(current).length === 0) {
       this.isPlaying = false
     } else {
       this.currentlyPlaying = current
       this.isPlaying = true
     }
+
+    this.topArtists = await spotifyClient.getTopArtists();
+    this.topTracks = await spotifyClient.getTopTracks();
   }
 }
 </script>

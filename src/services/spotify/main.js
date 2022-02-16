@@ -47,17 +47,26 @@ const spotifyClient = async function(req, res, url) {
     })
 }
 
-const getData = async function (req, res) {
+const getData = async function (req, res, url) {
 
-    const key = hashString(getToday().toString())
+    const key = hashString(getToday().toString() + url)
 
     if (cache.has(key)) return cache.get(key)
 
-    const url = 'https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=5'
     const entry = await spotifyClient(req, res, url)
     const ttl = secondsUntilEndOfDay()
     cache.set(key, entry, ttl)
     return entry
+}
+
+const getTopArtists = function(req, res) {
+    const url = 'https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=5'
+    return getData(req, res, url)
+}
+
+const getTopTracks = function(req, res) {
+    const url = 'https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=5'
+    return getData(req, res, url)
 }
 
 const getCurrentlyPlaying = async function(req, res) {
@@ -101,6 +110,7 @@ const getCurrentlyPlaying = async function(req, res) {
 
 
 module.exports = {
-    getData,
+    getTopArtists,
+    getTopTracks,
     getCurrentlyPlaying
 }

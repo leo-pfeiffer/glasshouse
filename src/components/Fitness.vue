@@ -135,8 +135,8 @@ export default {
     this.update(30)
   },
   methods: {
-    update: function (days) {
-      const newWorkouts = fitness.retrieve(days)
+    update: async function (days) {
+      const newWorkouts = await fitness.retrieve(days)
       while (this.workouts.length !== 0) {
         this.workouts.pop()
       }

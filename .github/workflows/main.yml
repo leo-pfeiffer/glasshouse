@@ -23,6 +23,7 @@ jobs:
         run: |
           chmod +x ./create-app-yml.sh
           ./create-app-yml.sh "$(echo $DOT_ENV | base64 --decode)"
+
         shell: bash
         
       - id: 'deployment'

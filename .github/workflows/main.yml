@@ -21,8 +21,8 @@ jobs:
         env:
           DOT_ENV: ${{ secrets.ENV }}
         run: |
-          chmod +x ./create-app-yml.sh
-          ./create-app-yml.sh "$(echo $DOT_ENV | base64 --decode)"
+          chmod +x ./scripts/create-app-yml.sh
+          ./scripts/create-app-yml.sh "$(echo $DOT_ENV | base64 --decode)"
 
         shell: bash
         

@@ -17,8 +17,8 @@ jobs:
         env:
           DOT_ENV: ${{ secrets.ENV }}
         run : |
-          chmod +x "${GITHUB_WORKSPACE}/create-app-yml.sh"
-          "${GITHUB_WORKSPACE}/create-app-yml.sh" "$($DOT_ENV | base64 --decode)"
+          chmod +x ./create-app-yml.sh
+          ./create-app-yml.sh "$($DOT_ENV | base64 --decode)"
     
       - id: 'checkout'
         uses: actions/checkout@v2

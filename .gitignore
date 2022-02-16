@@ -1,4 +1,5 @@
 /.env
 /encoded.env
+/app.yaml
 /node_modules/
 /.idea/

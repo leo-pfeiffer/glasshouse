@@ -16,7 +16,9 @@ jobs:
       - id: 'app-yml'
         env:
           DOT_ENV: ${{ secrets.ENV }}
-        run : sh create-app-yml.sh "$($DOT_ENV | base64 --decode)"
+        run : |
+          chmod +x create-app-yml.sh
+          ./create-app-yml.sh "$($DOT_ENV | base64 --decode)"
     
       - id: 'checkout'
         uses: actions/checkout@v2

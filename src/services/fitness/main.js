@@ -1,7 +1,7 @@
 require('dotenv').config()
 const {insertEntry, getFiltered} = require("../../db/dbconfig");
 const hashString = require('../../utils/hashing')
-const {getToday} = require("../../utils/datetime");
+const {getToday, minusOneMonth, secondsUntilEndOfDay} = require("../../utils/datetime");
 const Cache = require('../../utils/cache')
 
 const COLLECTION = process.env.FITNESS_COLLECTION;
@@ -38,14 +38,13 @@ const read = async function() {
     if (cache.has(key)) return cache.get(key)
 
     // Date from one month ago
-    const date = new Date();
-    date.setMonth(date.getMonth() - 1);
+    const date = minusOneMonth(new Date())
 
     // all entries last month
     const filter = {"start": {$gte: date.toISOString()}}
     const workouts = await getFiltered(filter, "start", COLLECTION);
 
-    const ttl = cache.ttlEndOfDay()
+    const ttl = secondsUntilEndOfDay()
     cache.set(key, workouts, ttl)
     return workouts
 }

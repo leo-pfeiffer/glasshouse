@@ -2,7 +2,7 @@ require('dotenv').config();
 const request = require('request');
 const {cache, refresh} = require("./auth");
 const hashString = require("../../utils/hashing");
-const {getToday} = require("../../utils/datetime");
+const {getToday, secondsUntilEndOfDay} = require("../../utils/datetime");
 
 const K_ACCESS_TOKEN = 'access-token'
 
@@ -55,7 +55,7 @@ const getData = async function (req, res) {
 
     const url = 'https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=5'
     const entry = await spotifyClient(req, res, url)
-    const ttl = cache.ttlEndOfDay()
+    const ttl = secondsUntilEndOfDay()
     cache.set(key, entry, ttl)
     return entry
 }

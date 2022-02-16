@@ -60,16 +60,4 @@ module.exports = class {
     flushAll() {
         this.provider.flushAll()
     }
-
-    /**
-     * Returns seconds until the end of the current day for timeouts
-     * */
-    ttlEndOfDay() {
-        const d = new Date();
-        const h = d.getHours();
-        const m = d.getMinutes();
-        const s = d.getSeconds();
-        return (24*60*60) - (h*60*60) - (m*60) - s;
-    }
-
 }

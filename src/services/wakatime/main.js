@@ -3,7 +3,7 @@ const {WakaTimeClient} = require('wakatime-client')
 const {RANGE} = require('wakatime-client');
 const {insertEntry} = require("../../db/dbconfig");
 const hashString = require('../../utils/hashing')
-const {getToday} = require("../../utils/datetime");
+const {getToday, secondsUntilEndOfDay} = require("../../utils/datetime");
 const Cache = require('../../utils/cache')
 
 const cache = new Cache();
@@ -62,7 +62,6 @@ const makeEntry = async function(date) {
 }
 
 
-
 /**
  * Write new wakatime entries to the database.
  * */
@@ -82,7 +81,7 @@ const read = async function() {
     if (cache.has(key)) return cache.get(key)
 
     const entry = await makeEntry(getToday())
-    const ttl = cache.ttlEndOfDay()
+    const ttl = secondsUntilEndOfDay()
     cache.set(key, entry, ttl)
     return entry
 }

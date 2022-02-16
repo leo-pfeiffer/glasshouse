@@ -1,23 +1,19 @@
 require('dotenv').config();
 const request = require('request'); // "Request" library
 const querystring = require('querystring');
+const Cache = require('../../utils/cache')
 
-const client_id = process.env.SPOTIFY_CLIENT_ID;                      // Your client id
-const client_secret = process.env.SPOTIFY_CLIENT_SECRET;              // Your secret
-const redirect_uri = 'http://localhost:5720/api/v1/spotify/callback'; // Your redirect uri
-
-const Cache = require('../utils/cache')
+const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;                      // Your client id
+const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;              // Your secret
+const REDIRECT_URI = 'http://localhost:5720/api/v1/spotify/callback'; // Your redirect uri
 
 const cache = new Cache();
 
-const ACCESS_TOKEN = 'access-token'
-const REFRESH_TOKEN = 'refresh-token'
+const K_ACCESS_TOKEN = 'access-token'
+const K_REFRESH_TOKEN = 'refresh-token'
 
-cache.set(ACCESS_TOKEN, process.env.SPOTIFY_BASE_ACCESS_TOKEN)
-cache.set(REFRESH_TOKEN, process.env.SPOTIFY_BASE_REFRESH_TOKEN)
-
-
-
+cache.set(K_ACCESS_TOKEN, process.env.SPOTIFY_BASE_ACCESS_TOKEN)
+cache.set(K_REFRESH_TOKEN, process.env.SPOTIFY_BASE_REFRESH_TOKEN)
 
 /**
  * Generates a random string containing numbers and letters
@@ -43,9 +39,9 @@ const login = function (req, res) {
 
     const queryParams = querystring.stringify({
         response_type: 'code',
-        client_id: client_id,
+        client_id: CLIENT_ID,
         scope: scope,
-        redirect_uri: redirect_uri,
+        redirect_uri: REDIRECT_URI,
         state: state
     })
 
@@ -59,11 +55,11 @@ const callback = function (req, res) {
         url: 'https://accounts.spotify.com/api/token',
         form: {
             code: code,
-            redirect_uri: redirect_uri,
+            redirect_uri: REDIRECT_URI,
             grant_type: 'authorization_code'
         },
         headers: {
-            'Authorization': 'Basic ' + (Buffer.from(client_id + ':' + client_secret).toString('base64'))
+            'Authorization': 'Basic ' + (Buffer.from(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64'))
         },
         json: true
     };
@@ -73,7 +69,7 @@ const callback = function (req, res) {
             const accessToken = body.access_token;
             const refreshToken = body.refresh_token;
 
-            cache.set(ACCESS_TOKEN, accessToken)
+            cache.set(K_ACCESS_TOKEN, accessToken)
 
             res.send({'Access Token': accessToken, 'Refresh Token': refreshToken})
         }
@@ -88,7 +84,7 @@ const refresh = function (req, res) {
 
     console.log("Refreshing token")
 
-    const refresh_token = req.query.refresh_token || cache.get(REFRESH_TOKEN);
+    const refresh_token = req.query.refresh_token || cache.get(K_REFRESH_TOKEN);
 
     if (refresh_token === undefined || refresh_token === null) {
         throw new Error("No token provided")
@@ -96,7 +92,7 @@ const refresh = function (req, res) {
 
     const authOptions = {
         url: 'https://accounts.spotify.com/api/token',
-        headers: {'Authorization': 'Basic ' + (Buffer.from(client_id + ':' + client_secret).toString('base64'))},
+        headers: {'Authorization': 'Basic ' + (Buffer.from(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64'))},
         form: {
             grant_type: 'refresh_token',
             refresh_token: refresh_token
@@ -107,7 +103,7 @@ const refresh = function (req, res) {
     return new Promise(function(resolve, reject) {
         request.post(authOptions, function (error, response, body) {
             if (!error && response.statusCode === 200) {
-                cache.set(ACCESS_TOKEN, body.access_token)
+                cache.set(K_ACCESS_TOKEN, body.access_token)
                 resolve(body)
             }
             else {

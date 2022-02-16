@@ -1,8 +1,8 @@
 require('dotenv').config();
 const request = require('request');
 const {cache, refresh} = require("./auth");
-const hashString = require("../utils/hashing");
-const {getToday} = require("../utils/datetime");
+const hashString = require("../../utils/hashing");
+const {getToday} = require("../../utils/datetime");
 
 const K_ACCESS_TOKEN = 'access-token'
 
@@ -51,56 +51,52 @@ const getData = async function (req, res) {
 
     const key = hashString(getToday().toString())
 
-    if (cache.has(key)) {
-        return cache.get(key)
-    } else {
-        const url = 'https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=5'
-        const entry = await spotifyClient(req, res, url)
-        const ttl = cache.ttlEndOfDay()
-        cache.set(key, entry, ttl)
-        return entry
-    }
+    if (cache.has(key)) return cache.get(key)
+
+    const url = 'https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=5'
+    const entry = await spotifyClient(req, res, url)
+    const ttl = cache.ttlEndOfDay()
+    cache.set(key, entry, ttl)
+    return entry
 }
 
 const getCurrentlyPlaying = async function(req, res) {
 
     const key = 'currently-playing'
 
-    if (cache.has(key)) {
-        return cache.get(key)
-    } else {
-        const url = 'https://api.spotify.com/v1/me/player/currently-playing?market=GB&additional_types=track%2Cepisode'
-        const raw = await spotifyClient(req, res, url)
-        const entry = {}
+    if (cache.has(key)) return cache.get(key)
 
-        if (Object.keys(raw).length === 0) {
-            cache.set(key, {}, 30)
-            return {}
-        }
+    const url = 'https://api.spotify.com/v1/me/player/currently-playing?market=GB&additional_types=track%2Cepisode'
+    const raw = await spotifyClient(req, res, url)
+    const entry = {}
 
-        entry['spotify_url'] = raw.item.external_urls.spotify
-        entry['name'] = raw.item.name
-        entry['is_playing'] = raw.is_playing
-
-        // episode
-        if (raw.currently_playing_type === 'episode') {
-            entry['type'] = 'episode'
-            entry['image'] = raw.item.images[0]
-            entry['show'] = raw.item.show.name
-        }
-
-        // track
-        else {
-            entry['type'] = 'track'
-            entry['artists'] = raw.item.artists.map(e => e.name)
-            entry['image'] = raw.item.album.images[0]
-            entry['popularity'] = raw.item.popularity
-        }
-
-        cache.set(key, entry, 30)
-
-        return entry
+    if (Object.keys(raw).length === 0) {
+        cache.set(key, {}, 30)
+        return {}
     }
+
+    entry['spotify_url'] = raw.item.external_urls.spotify
+    entry['name'] = raw.item.name
+    entry['is_playing'] = raw.is_playing
+
+    // episode
+    if (raw.currently_playing_type === 'episode') {
+        entry['type'] = 'episode'
+        entry['image'] = raw.item.images[0]
+        entry['show'] = raw.item.show.name
+    }
+
+    // track
+    else {
+        entry['type'] = 'track'
+        entry['artists'] = raw.item.artists.map(e => e.name)
+        entry['image'] = raw.item.album.images[0]
+        entry['popularity'] = raw.item.popularity
+    }
+
+    cache.set(key, entry, 30)
+
+    return entry
 }
 
 

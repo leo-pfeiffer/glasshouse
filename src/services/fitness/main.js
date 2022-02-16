@@ -1,7 +1,12 @@
 require('dotenv').config()
 const {insertEntry, getFiltered} = require("../../db/dbconfig");
+const hashString = require('../../utils/hashing')
+const {getToday} = require("../../utils/datetime");
+const Cache = require('../../utils/cache')
 
-const collection = process.env.FITNESS_COLLECTION;
+const COLLECTION = process.env.FITNESS_COLLECTION;
+
+const cache = new Cache();
 
 const getWorkouts = function(body) {
     return body.data.workouts;
@@ -21,7 +26,7 @@ const cleanWorkout = function(workout) {
 }
 
 const write = async function (rawWorkouts) {
-    getWorkouts(rawWorkouts).map(cleanWorkout).map(w => insertEntry(w, collection))
+    getWorkouts(rawWorkouts).map(cleanWorkout).map(w => insertEntry(w, COLLECTION))
 }
 
 /**
@@ -29,14 +34,19 @@ const write = async function (rawWorkouts) {
  * */
 const read = async function() {
 
-    // Date from one mont ago
+    const key = hashString(getToday().toString())
+    if (cache.has(key)) return cache.get(key)
+
+    // Date from one month ago
     const date = new Date();
     date.setMonth(date.getMonth() - 1);
 
     // all entries last month
     const filter = {"start": {$gte: date.toISOString()}}
+    const workouts = await getFiltered(filter, "start", COLLECTION);
 
-    const workouts = await getFiltered(filter, "start", collection);
+    const ttl = cache.ttlEndOfDay()
+    cache.set(key, workouts, ttl)
     return workouts
 }
 

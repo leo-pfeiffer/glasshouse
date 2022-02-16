@@ -1,21 +1,20 @@
 require('dotenv').config()
-const { WakaTimeClient } = require('wakatime-client')
-const { RANGE } = require('wakatime-client');
+const {WakaTimeClient} = require('wakatime-client')
+const {RANGE} = require('wakatime-client');
 const {insertEntry} = require("../../db/dbconfig");
-const Cache = require('../utils/cache')
+const hashString = require('../../utils/hashing')
+const {getToday} = require("../../utils/datetime");
+const Cache = require('../../utils/cache')
 
 const cache = new Cache();
-const hashString = require('../utils/hashing')
-const {getToday} = require("../utils/datetime");
 
-const apiKey = process.env.WAKA_API_KEY
-const collection = process.env.WAKA_COLLECTION;
+const API_KEY = process.env.WAKA_API_KEY
+const COLLECTION = process.env.WAKA_COLLECTION;
 
-const client = new WakaTimeClient(apiKey);
+const client = new WakaTimeClient(API_KEY);
 
-const getStats = async function() {
-    const stats = await client.getMyStats({range: RANGE.LAST_30_DAYS});
-    return stats
+const getStats = function() {
+    return client.getMyStats({range: RANGE.LAST_30_DAYS})
 }
 
 const getDailyAverage = function(stats) {
@@ -23,7 +22,7 @@ const getDailyAverage = function(stats) {
 }
 
 const getEditors = function(stats) {
-    if (stats !== undefined & stats.data !== undefined & stats.data.editors !== undefined) {
+    if (stats !== undefined & stats.data !== undefined && stats.data.editors !== undefined) {
         return reduceToArray(stats.data.editors)
     }
 
@@ -34,7 +33,7 @@ const getTotalDuration = function(stats) {
 }
 
 const getLanguages = function(stats) {
-    if (stats !== undefined & stats.data !== undefined & stats.data.languages !== undefined) {
+    if (stats !== undefined & stats.data !== undefined && stats.data.languages !== undefined) {
         return reduceToArray(stats.data.languages)
     }
 
@@ -69,7 +68,7 @@ const makeEntry = async function(date) {
  * */
 const write = function() {
     makeEntry(getToday())
-        .then(entry => insertEntry(entry, collection))
+        .then(entry => insertEntry(entry, COLLECTION))
         .then(() => console.log("Success!"))
         .catch((e) => console.error(e))
 }
@@ -80,14 +79,12 @@ const write = function() {
 const read = async function() {
     const key = hashString(getToday().toString())
 
-    if (cache.has(key)) {
-        return cache.get(key)
-    } else {
-        const entry = await makeEntry(getToday())
-        const ttl = cache.ttlEndOfDay()
-        cache.set(key, entry, ttl)
-        return entry
-    }
+    if (cache.has(key)) return cache.get(key)
+
+    const entry = await makeEntry(getToday())
+    const ttl = cache.ttlEndOfDay()
+    cache.set(key, entry, ttl)
+    return entry
 }
 
 module.exports = {

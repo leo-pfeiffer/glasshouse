@@ -15,7 +15,7 @@ const app = express()
 app.use(cors())
 app.use(cookieParser());
 app.use(express.urlencoded({extended: true}))
-app.use(bodyParser.json({limit: '10mb'}));
+app.use(bodyParser.json({limit: '30mb'}));
 
 // routes
 app.use('/api/v1/fitness-upload', authenticate, fitnessUploadRoute)

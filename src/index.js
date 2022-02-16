@@ -17,6 +17,7 @@ app.use(express.urlencoded({extended: true}))
 app.use(bodyParser.json({limit: '30mb'}));
 
 // routes
+app.use('/', (req, res) => res.send('Hello World!'))
 app.use('/api/v1/fitness-upload', authenticate, fitnessRoute.downloadRouter)
 app.use('/api/v1/fitness', fitnessRoute.downloadRouter)
 app.use('/api/v1/wakatime', wakaTimeRoute)

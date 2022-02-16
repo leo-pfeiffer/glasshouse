@@ -12,9 +12,9 @@ jobs:
     name: Deploy to App Engine
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: checkout
         uses: actions/checkout@v2
-      - name: Google App Engine
+      - name: deployment
         uses: google-github-actions/deploy-appengine@v0.4.0
         with:
           project_id: glasshouse-341514
@@ -22,3 +22,5 @@ jobs:
           credentials: ${{secrets.GOOGLE_APP_ENGINE_KEY}}
           flags: --no-cache
           deliverables: app.yaml
+      - id: test
+        run: 'curl "${{ steps.deployment.outputs.url }}"'

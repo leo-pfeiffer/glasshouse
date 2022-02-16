@@ -8,7 +8,9 @@
                        :name="currentlyPlaying.name"
                        :persons="currentlyPlaying.artists"
                        :src="currentlyPlaying.spotify_url"
+                       v-if="isPlaying"
           />
+          <p v-else>Not currently playing any songs!</p>
         </article>
       </div>
       <div class="tile is-parent">
@@ -85,14 +87,21 @@ export default {
     return {
       currentlyPlaying: {},
       topArtists: [],
-      topTracks: []
+      topTracks: [],
+      isPlaying: false
     }
   },
   components: {
     SpotifyItem
   },
-  created() {
-    this.currentlyPlaying = retrieve();
+  async created() {
+    const current = await retrieve();
+    if (Object.keys(current).length === 0) {
+      this.isPlaying = false
+    } else {
+      this.currentlyPlaying = current
+      this.isPlaying = true
+    }
   }
 }
 </script>

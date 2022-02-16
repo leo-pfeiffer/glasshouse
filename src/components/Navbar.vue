@@ -25,7 +25,7 @@
           <a class="navbar-item" href="https://linkedin.com/in/leopoldpfeiffer">
             LinkedIn
           </a>
-          <a class="navbar-item" href="">
+          <a class="navbar-item" href="https://leo-pfeiffer.github.io/glasshouse/">
             How I built this
           </a>
         </div>

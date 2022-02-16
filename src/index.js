@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require("express");
 const authenticate = require("./auth")
 
+const indexRoute = require('./routes/index')
 const fitnessRoute = require('./routes/fitness')
 const wakaTimeRoute = require('./routes/wakatime')
 const spotifyRoute = require('./routes/spotify')
@@ -17,7 +18,7 @@ app.use(express.urlencoded({extended: true}))
 app.use(bodyParser.json({limit: '30mb'}));
 
 // routes
-app.use('/', (req, res) => res.send('Hello World!'))
+app.use('/api/v1/index', indexRoute)
 app.use('/api/v1/fitness-upload', authenticate, fitnessRoute.downloadRouter)
 app.use('/api/v1/fitness', fitnessRoute.downloadRouter)
 app.use('/api/v1/wakatime', wakaTimeRoute)

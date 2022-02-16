@@ -40,8 +40,6 @@ import Vue from 'vue'
 import VueC3 from 'vue-c3'
 import wakatime from "@/api/wakatime";
 import ColorScheme from 'color-scheme';
-// import moment from "moment";
-
 const scheme = new ColorScheme();
 
 
@@ -57,7 +55,8 @@ export default {
     return {
       editorChartHandler: new Vue(),
       langChartHandler: new Vue(),
-      wakaData: {}
+      wakaData: {},
+      available: false,
     }
   },
   computed: {
@@ -67,9 +66,6 @@ export default {
     avgTime: function() {
       return this.wakaData.average / 3600
     },
-  },
-  created() {
-    this.wakaData = wakatime.retrieve()
   },
   methods: {
     makeChart: function(columnData, handler, scheme) {
@@ -105,16 +101,22 @@ export default {
       return Math.floor(num * m) / m;
     },
   },
-  mounted() {
-    const editors = this.wakaData.editors.reduce((a, b) => [... a, [b.name, b.total]], [])
-    const editorScheme = scheme.from_hex('00faff').scheme('contrast');
-    this.makeChart(editors, this.editorChartHandler, editorScheme);
+  async mounted() {
+    const data = await wakatime.retrieve()
+    if (Object.keys(data).length > 0) {
+      this.wakaData = data
+      this.available = true
 
-    let langs = this.wakaData.languages.reduce((a, b) => [... a, [b.name, b.total]], [])
-    langs.sort((a, b) => b[1] > a[1] ? 1 : -1)
-    langs = langs.slice(0, Math.min(5, langs.length))
-    const langScheme = scheme.from_hex('cb21ff').scheme('contrast');
-    this.makeChart(langs, this.langChartHandler, langScheme);
+      const editors = this.wakaData.editors.reduce((a, b) => [... a, [b.name, b.total]], [])
+      const editorScheme = scheme.from_hex('00faff').scheme('contrast');
+      this.makeChart(editors, this.editorChartHandler, editorScheme);
+
+      let langs = this.wakaData.languages.reduce((a, b) => [... a, [b.name, b.total]], [])
+      langs.sort((a, b) => b[1] > a[1] ? 1 : -1)
+      langs = langs.slice(0, Math.min(5, langs.length))
+      const langScheme = scheme.from_hex('cb21ff').scheme('contrast');
+      this.makeChart(langs, this.langChartHandler, langScheme);
+    }
   }
 }
 </script>

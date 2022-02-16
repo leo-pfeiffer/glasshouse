@@ -1,3 +1,4 @@
 /.env
+/encoded.env
 /node_modules/
 /.idea/

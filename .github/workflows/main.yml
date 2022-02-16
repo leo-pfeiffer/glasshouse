@@ -13,6 +13,10 @@ jobs:
     name: Deploy to App Engine
     runs-on: ubuntu-latest
     steps:
+      - id: 'app-yml'
+        env:
+          DOT_ENV: ${{ secrets.ENV }}
+        run : sh create-app-yml.sh "$($DOT_ENV | base64 --decode)"
     
       - id: 'checkout'
         uses: actions/checkout@v2

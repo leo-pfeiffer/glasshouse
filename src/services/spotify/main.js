@@ -1,14 +1,27 @@
 require('dotenv').config();
 const request = require('request');
 const {cache, refresh} = require("./auth");
+const hashString = require("../utils/hashing");
+const {getToday} = require("../utils/datetime");
 
+const K_ACCESS_TOKEN = 'access-token'
+
+const retry = function(req, res, options) {
+    return new Promise(function(resolve, reject) {
+        return request.get(options, function (error, response, body) {
+            if (error) return reject(error)
+            if (response.statusCode === 204) return resolve({})
+            return resolve(body)
+        })
+    })
+}
 
 const spotifyClient = async function(req, res, url) {
 
     const options = () => {
         return {
             url: url,
-            headers: {'Authorization': 'Bearer ' + cache.accessToken},
+            headers: {'Authorization': 'Bearer ' + cache.get(K_ACCESS_TOKEN)},
             json: true
         }
     };
@@ -16,52 +29,78 @@ const spotifyClient = async function(req, res, url) {
     // make the actual request
     return new Promise((resolve, reject) => {
         request.get(options(), async function (error, response, body) {
+            if (error) return reject(error)
+            if (response.statusCode === 204) return resolve({})
+
+            let returnVal = body
             if (body.hasOwnProperty('error') && body.error.status === 401) {
 
                 // refresh token
                 await refresh(req, res);
+                returnVal = await retry(req, res, options())
+                resolve(returnVal)
 
-                await request.get(options(), function (error, response, body) {
-                    resolve(body)
-                })
             } else {
-                resolve(body)
+                resolve(returnVal)
             }
-            return body
         })
     })
 }
 
-const getData = function (req, res) {
-    const url = 'https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=5'
-    return spotifyClient(req, res, url)
+const getData = async function (req, res) {
+
+    const key = hashString(getToday().toString())
+
+    if (cache.has(key)) {
+        return cache.get(key)
+    } else {
+        const url = 'https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=5'
+        const entry = await spotifyClient(req, res, url)
+        const ttl = cache.ttlEndOfDay()
+        cache.set(key, entry, ttl)
+        return entry
+    }
 }
 
 const getCurrentlyPlaying = async function(req, res) {
-    const url = 'https://api.spotify.com/v1/me/player/currently-playing?market=GB&additional_types=track%2Cepisode'
-    const raw = await spotifyClient(req, res, url)
-    const data = {}
 
-    data['spotify_url'] = raw.item.external_urls.spotify
-    data['name'] = raw.item.name
-    data['is_playing'] = raw.is_playing
+    const key = 'currently-playing'
 
-    // episode
-    if (raw.currently_playing_type === 'episode') {
-        data['type'] = 'episode'
-        data['image'] = raw.item.images[0]
-        data['show'] = raw.item.show.name
+    if (cache.has(key)) {
+        return cache.get(key)
+    } else {
+        const url = 'https://api.spotify.com/v1/me/player/currently-playing?market=GB&additional_types=track%2Cepisode'
+        const raw = await spotifyClient(req, res, url)
+        const entry = {}
+
+        if (Object.keys(raw).length === 0) {
+            cache.set(key, {}, 30)
+            return {}
+        }
+
+        entry['spotify_url'] = raw.item.external_urls.spotify
+        entry['name'] = raw.item.name
+        entry['is_playing'] = raw.is_playing
+
+        // episode
+        if (raw.currently_playing_type === 'episode') {
+            entry['type'] = 'episode'
+            entry['image'] = raw.item.images[0]
+            entry['show'] = raw.item.show.name
+        }
+
+        // track
+        else {
+            entry['type'] = 'track'
+            entry['artists'] = raw.item.artists.map(e => e.name)
+            entry['image'] = raw.item.album.images[0]
+            entry['popularity'] = raw.item.popularity
+        }
+
+        cache.set(key, entry, 30)
+
+        return entry
     }
-
-    // track
-    else {
-        data['type'] = 'track'
-        data['artists'] = raw.item.artists.map(e => e.name)
-        data['image'] = raw.item.album.images[0]
-        data['popularity'] = raw.item.popularity
-    }
-
-    return data
 }
 
 

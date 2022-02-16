@@ -1,17 +1,22 @@
 require('dotenv').config();
 const request = require('request'); // "Request" library
 const querystring = require('querystring');
-const TokenCache = require("./tokenCache");
 
 const client_id = process.env.SPOTIFY_CLIENT_ID;                      // Your client id
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET;              // Your secret
 const redirect_uri = 'http://localhost:5720/api/v1/spotify/callback'; // Your redirect uri
 
-// const cache = new Map();
-const cache = new TokenCache();
+const Cache = require('../utils/cache')
 
-cache.accessToken = process.env.SPOTIFY_BASE_ACCESS_TOKEN
-cache.refreshToken = process.env.SPOTIFY_BASE_REFRESH_TOKEN
+const cache = new Cache();
+
+const ACCESS_TOKEN = 'access-token'
+const REFRESH_TOKEN = 'refresh-token'
+
+cache.set(ACCESS_TOKEN, process.env.SPOTIFY_BASE_ACCESS_TOKEN)
+cache.set(REFRESH_TOKEN, process.env.SPOTIFY_BASE_REFRESH_TOKEN)
+
+
 
 
 /**
@@ -65,10 +70,12 @@ const callback = function (req, res) {
 
     request.post(authOptions, function (error, response, body) {
         if (!error && response.statusCode === 200) {
-            const access_token = body.access_token;
-            const refresh_token = body.refresh_token;
-            cache.accessToken = access_token
-            res.send({'Access Token': access_token, 'Refresh Token': refresh_token})
+            const accessToken = body.access_token;
+            const refreshToken = body.refresh_token;
+
+            cache.set(ACCESS_TOKEN, accessToken)
+
+            res.send({'Access Token': accessToken, 'Refresh Token': refreshToken})
         }
         // Invalid token
         else {
@@ -81,7 +88,7 @@ const refresh = function (req, res) {
 
     console.log("Refreshing token")
 
-    const refresh_token = req.query.refresh_token || cache.refreshToken;
+    const refresh_token = req.query.refresh_token || cache.get(REFRESH_TOKEN);
 
     if (refresh_token === undefined || refresh_token === null) {
         throw new Error("No token provided")
@@ -100,7 +107,7 @@ const refresh = function (req, res) {
     return new Promise(function(resolve, reject) {
         request.post(authOptions, function (error, response, body) {
             if (!error && response.statusCode === 200) {
-                cache.accessToken = body.access_token
+                cache.set(ACCESS_TOKEN, body.access_token)
                 resolve(body)
             }
             else {

@@ -79,6 +79,7 @@ I eventually solved this by setting a base64 encoded version of my `.env` file a
 + [Health Auto Export App](https://www.healthexportapp.com/)
 + [Spotify Web API](https://developer.spotify.com/documentation/web-api/)
 + [WakaTime API](https://wakatime.com/developers)
++ [MongoDB](https://www.mongodb.com/)
 + [Google App Engine](https://cloud.google.com/appengine)
 + [Netlify](https://www.netlify.com)
 + [Bulma](https://bulma.io/)

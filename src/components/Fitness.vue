@@ -117,7 +117,7 @@ export default {
       },
       workouts: [],
       handler: new Vue(),
-      buttonActive: [true, true, false]
+      buttonActive: [false, true, true]
     };
   },
   computed: {
@@ -132,7 +132,7 @@ export default {
     },
   },
   created() {
-    this.update(30)
+    this.update(7)
   },
   methods: {
     update: async function (days) {

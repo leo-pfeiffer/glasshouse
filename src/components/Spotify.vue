@@ -16,6 +16,18 @@
       <div class="tile is-parent">
         <article class="tile is-child box">
           <p class="subtitle">Recently played</p>
+
+          <div class="table-container">
+            <table class="table is-hoverable">
+              <tbody>
+              <tr v-for="(track, i) of recentlyPlayed" v-bind:key="i">
+                <td><img :src="getLastImageURL(track.track.album.images)" alt="" class="mini-img"/></td>
+                <td><a :href="track.track.external_urls.spotify">{{ track.track.name }}</a></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
         </article>
       </div>
     </div>
@@ -23,19 +35,13 @@
     <div class="tile is-ancestor">
       <div class="tile is-parent">
         <article class="tile is-child box">
-          <p class="subtitle">Top Artists (recently)</p>
+          <p class="subtitle">Top Artists (30 dys)</p>
 
           <div class="table-container">
             <table class="table is-hoverable">
-              <thead>
-              <tr>
-                <th>#</th>
-                <th>Artist</th>
-              </tr>
-              </thead>
               <tbody>
               <tr v-for="(artist, i) of topArtists" v-bind:key="i">
-                <td>{{ i + 1}}</td>
+                <td><img :src="getLastImageURL(artist.images)" alt="" class="mini-img"/></td>
                 <td><a :href="artist.external_urls.spotify">{{ artist.name }}</a></td>
               </tr>
               </tbody>
@@ -46,18 +52,12 @@
       </div>
       <div class="tile is-parent">
         <article class="tile is-child box">
-          <p class="subtitle">Top Tracks (recently)</p>
+          <p class="subtitle">Top Tracks (30 dys)</p>
           <table class="table is-hoverable">
-            <thead>
-            <tr>
-              <th>#</th>
-              <th>Track</th>
-            </tr>
-            </thead>
             <tbody>
-            <tr v-for="(artist, i) of topTracks" v-bind:key="i">
-              <td>{{ i + 1 }}</td>
-              <td><a :href="artist.external_urls.spotify">{{ artist.name }}</a></td>
+            <tr v-for="(track, i) of topTracks" v-bind:key="i">
+              <td><img :src="getLastImageURL(track.album.images)" alt="" class="mini-img"/></td>
+              <td><a :href="track.external_urls.spotify">{{ track.name }}</a></td>
             </tr>
             </tbody>
           </table>
@@ -80,11 +80,21 @@ export default {
       currentlyPlaying: {},
       topArtists: [],
       topTracks: [],
+      recentlyPlayed: [],
       isPlaying: false
     }
   },
   components: {
     SpotifyItem
+  },
+  methods: {
+    getLastImageURL: function(images) {
+      const length = images.length
+      if (length === 0) {
+        return null
+      }
+      return images[length - 1].url;
+    }
   },
   async created() {
     const current = await spotifyClient.getCurrentlyPlaying();
@@ -97,10 +107,14 @@ export default {
 
     this.topArtists = await spotifyClient.getTopArtists();
     this.topTracks = await spotifyClient.getTopTracks();
+    console.log(this.topArtists)
+    this.recentlyPlayed = await spotifyClient.getRecentlyPlayed();
   }
 }
 </script>
 
 <style scoped>
-
+.mini-img {
+  height: 1.5em;
+}
 </style>

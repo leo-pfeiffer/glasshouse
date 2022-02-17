@@ -25,6 +25,13 @@ const getTopTracks = async function () {
     return tracks.slice(0, Math.min(5, tracks.length))
 }
 
+const getRecentlyPlayed = async function () {
+    const url = "https://glasshouse-341514.nw.r.appspot.com/api/v1/spotify/recently-played"
+    let tracks = await retrieve(url)
+    tracks = tracks.items
+    return tracks.slice(0, Math.min(5, tracks.length))
+}
+
 // // track
 // return {
 //     "spotify_url": "https://open.spotify.com/track/6supMAknraGpJrN5qqYfV8",
@@ -55,4 +62,4 @@ const getTopTracks = async function () {
 // }
 
 
-module.exports = {getTopArtists, getTopTracks, getCurrentlyPlaying}
+module.exports = {getTopArtists, getTopTracks, getCurrentlyPlaying, getRecentlyPlayed}

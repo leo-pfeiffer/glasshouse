@@ -69,6 +69,11 @@ const getTopTracks = function(req, res) {
     return getData(req, res, url)
 }
 
+const getRecentlyPlayed = function(req, res) {
+    const url = 'https://api.spotify.com/v1/me/player/recently-played?limit=5'
+    return getData(req, res, url)
+}
+
 const getCurrentlyPlaying = async function(req, res) {
 
     const key = 'currently-playing'
@@ -112,5 +117,6 @@ const getCurrentlyPlaying = async function(req, res) {
 module.exports = {
     getTopArtists,
     getTopTracks,
-    getCurrentlyPlaying
+    getCurrentlyPlaying,
+    getRecentlyPlayed
 }

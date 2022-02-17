@@ -26,6 +26,7 @@ app.use('/api/v1/wakatime', wakaTimeRoute)
 app.use('/api/v1/spotify/top-tracks', spotifyRoute.topTracksRouter)
 app.use('/api/v1/spotify/top-artists', spotifyRoute.topArtistsRouter)
 app.use('/api/v1/spotify/currently-playing', spotifyRoute.currentlyPlayingRouter)
+app.use('/api/v1/spotify/recently-played', spotifyRoute.recentlyPlayedRouter)
 app.use('/api/v1/spotify/login', spotifyRoute.loginRouter)
 app.use('/api/v1/spotify/callback', spotifyRoute.callbackRouter)
 

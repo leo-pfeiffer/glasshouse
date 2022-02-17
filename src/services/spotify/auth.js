@@ -15,6 +15,8 @@ const K_REFRESH_TOKEN = 'refresh-token'
 cache.set(K_ACCESS_TOKEN, process.env.SPOTIFY_BASE_ACCESS_TOKEN)
 cache.set(K_REFRESH_TOKEN, process.env.SPOTIFY_BASE_REFRESH_TOKEN)
 
+const SCOPE = 'user-top-read user-read-currently-playing user-read-recently-played';
+
 /**
  * Generates a random string containing numbers and letters
  * @param  {number} length The length of the string
@@ -35,12 +37,11 @@ const stateKey = 'spotify_auth_state';
 const login = function (req, res) {
     const state = generateRandomString(16);
     res.cookie(stateKey, state);
-    const scope = 'user-read-private user-read-email user-top-read user-read-currently-playing';
 
     const queryParams = querystring.stringify({
         response_type: 'code',
         client_id: CLIENT_ID,
-        scope: scope,
+        scope: SCOPE,
         redirect_uri: REDIRECT_URI,
         state: state
     })

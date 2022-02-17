@@ -5,7 +5,11 @@ const Cache = require('../../utils/cache')
 
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;                      // Your client id
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;              // Your secret
-const REDIRECT_URI = 'http://localhost:5720/api/v1/spotify/callback'; // Your redirect uri
+
+const BASE_URL = process.env.BASE_URL || 'http://localhost:' + (process.env.PORT || 8080)
+const REDIRECT_URI = BASE_URL + '/api/v1/spotify/callback'; // Your redirect uri
+
+console.log(REDIRECT_URI)
 
 const cache = new Cache();
 

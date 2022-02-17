@@ -1,6 +1,6 @@
 # glasshouse
 
-A small website gathering data from different apps I use every day.
+Glasshouse is a data dashboard where I gather data from apps I use everyday.
 
 Currently implemented:
 - Apple Fitness

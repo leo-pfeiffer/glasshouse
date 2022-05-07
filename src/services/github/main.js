@@ -1,4 +1,9 @@
 const axios = require("axios")
+const hashString = require('../../utils/hashing')
+const {getToday, minusOneMonth, secondsUntilEndOfDay} = require("../../utils/datetime");
+const Cache = require("../../utils/cache");
+
+const cache = new Cache();
 
 const getStats = function() {
     const url = "https://github-stats-rest.vercel.app/api?username=leo-pfeiffer&count_private=true&show_icons=true"
@@ -18,11 +23,20 @@ const getLangs = function() {
  * Read wakatime entries from API or cache.
  * */
 const read = async function() {
+
+    const key = hashString(getToday().toString())
+    if (cache.has(key)) return cache.get(key)
+
     const stats = await getStats();
     const langs = await getLangs();
-    return {
+
+    const data = {
         ...stats, ...langs
     }
+
+    const ttl = secondsUntilEndOfDay()
+    cache.set(key, data, ttl)
+    return data
 }
 
 module.exports = {

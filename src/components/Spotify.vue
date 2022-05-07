@@ -21,7 +21,7 @@
             <table class="table is-hoverable">
               <tbody>
               <tr v-for="(track, i) of recentlyPlayed" v-bind:key="i">
-                <td><img :src="getLastImageURL(track.track.album.images)" alt="" class="mini-img"/></td>
+                <td><img :src="getLastImageURL(track.track.album.images)" :alt="track.track.name" class="mini-img"/></td>
                 <td><a :href="track.track.external_urls.spotify">{{ track.track.name }}</a></td>
               </tr>
               </tbody>
@@ -41,7 +41,7 @@
             <table class="table is-hoverable">
               <tbody>
               <tr v-for="(artist, i) of topArtists" v-bind:key="i">
-                <td><img :src="getLastImageURL(artist.images)" alt="" class="mini-img"/></td>
+                <td><img :src="getLastImageURL(artist.images)" :alt="artist.name" class="mini-img"/></td>
                 <td><a :href="artist.external_urls.spotify">{{ artist.name }}</a></td>
               </tr>
               </tbody>
@@ -56,7 +56,7 @@
           <table class="table is-hoverable">
             <tbody>
             <tr v-for="(track, i) of topTracks" v-bind:key="i">
-              <td><img :src="getLastImageURL(track.album.images)" alt="" class="mini-img"/></td>
+              <td><img :src="getLastImageURL(track.album.images)" :alt="track.name" class="mini-img"/></td>
               <td><a :href="track.external_urls.spotify">{{ track.name }}</a></td>
             </tr>
             </tbody>
@@ -107,7 +107,6 @@ export default {
 
     this.topArtists = await spotifyClient.getTopArtists();
     this.topTracks = await spotifyClient.getTopTracks();
-    console.log(this.topArtists)
     this.recentlyPlayed = await spotifyClient.getRecentlyPlayed();
   }
 }
@@ -115,6 +114,10 @@ export default {
 
 <style scoped>
 .mini-img {
-  height: 1.5em;
+  max-height: 1.5em;
+  max-width: 1.5em;
+  width: auto;
+  height: auto;
 }
+
 </style>

@@ -20,7 +20,7 @@ app.use(bodyParser.json({limit: '30mb'}));
 
 // routes
 app.use('/api/v1/index', indexRoute)
-app.use('/api/v1/fitness-upload', authenticate, fitnessRoute.downloadRouter)
+app.use('/api/v1/fitness-upload', authenticate, fitnessRoute.uploadRouter)
 app.use('/api/v1/fitness', fitnessRoute.downloadRouter)
 app.use('/api/v1/wakatime', wakaTimeRoute)
 app.use('/api/v1/github', githubRoute)

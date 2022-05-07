@@ -12,6 +12,7 @@
       <WakaTime v-if="type==='wakatime'" :content="content"/>
       <Fitness v-else-if="type==='fitness'" :content="content"/>
       <Spotify v-else-if="type==='spotify'" :content="content"/>
+      <Github v-else-if="type==='github'" :content="content"/>
       <div class="content article-body" v-else>{{ content }}</div>
     </div>
   </div>
@@ -21,6 +22,7 @@
 import Fitness from "@/components/Fitness";
 import WakaTime from "@/components/WakaTime";
 import Spotify from "@/components/Spotify";
+import Github from "@/components/Github";
 
 export default {
   name: "Article",
@@ -28,6 +30,7 @@ export default {
     Spotify,
     WakaTime,
     Fitness,
+    Github
   },
   props: {
     title: String,

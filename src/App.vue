@@ -34,6 +34,13 @@
               img="wakatime.png"
               type="wakatime"
           />
+
+          <Article
+              title="Github"
+              content="Where my code lives"
+              img="github.png"
+              type="github"
+          />
         </div>
       </section>
     </div>

@@ -8,6 +8,7 @@ const indexRoute = require('./routes/index')
 const fitnessRoute = require('./routes/fitness')
 const wakaTimeRoute = require('./routes/wakatime')
 const spotifyRoute = require('./routes/spotify')
+const githubRoute = require('./routes/github')
 
 const app = express()
 
@@ -22,6 +23,7 @@ app.use('/api/v1/index', indexRoute)
 app.use('/api/v1/fitness-upload', authenticate, fitnessRoute.downloadRouter)
 app.use('/api/v1/fitness', fitnessRoute.downloadRouter)
 app.use('/api/v1/wakatime', wakaTimeRoute)
+app.use('/api/v1/github', githubRoute)
 
 app.use('/api/v1/spotify/top-tracks', spotifyRoute.topTracksRouter)
 app.use('/api/v1/spotify/top-artists', spotifyRoute.topArtistsRouter)

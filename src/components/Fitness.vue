@@ -46,66 +46,48 @@
         <apexchart type="bar" width="100%" height="250" :options="chartOptions" :series="workoutData"></apexchart>
     </div>
 
-    <div class="hooper-wrapper">
-      <hooper :settings="hooperSettings" style="height: 100%">
-        <slide v-for="w in workouts" v-bind:key="w.start.toString()">
-          <div class="box slider-box">
+    <div class="scrolling-wrapper-flexbox box">
 
-                  <p class="title is-6">{{ w.name }}</p>
-                  <p class="subtitle is-6">{{ getDate(w.start) }}</p>
+      <div class="scrolling-wrapper-card box" v-for="w in workouts" v-bind:key="w.start.toString()">
 
-                  <table class="table is-striped">
-                    <tbody>
-                    <tr>
-                      <td>Min</td>
-                      <td>{{ w.duration }}</td>
-                    </tr>
-                    <tr>
-                      <td>BPM</td>
-                      <td>{{ round(w.avgHeartRate.qty, 0) }}</td>
-                    </tr>
-                    <tr>
-                      <td>MET</td>
-                      <td>{{ round(w.intensity.qty, 1) }}</td>
-                    </tr>
-                    </tbody>
-                  </table>
+        <p class="title is-6">{{ w.name }}</p>
+        <p class="subtitle is-6">{{ getDate(w.start) }}</p>
 
-          </div>
-        </slide>
-        <hooper-navigation slot="hooper-addons"></hooper-navigation>
-      </hooper>
+        <table class="table is-striped">
+          <tbody>
+          <tr>
+            <td>Min</td>
+            <td>{{ w.duration }}</td>
+          </tr>
+          <tr>
+            <td>BPM</td>
+            <td>{{ round(w.avgHeartRate.qty, 0) }}</td>
+          </tr>
+          <tr>
+            <td>MET</td>
+            <td>{{ round(w.intensity.qty, 1) }}</td>
+          </tr>
+          </tbody>
+        </table>
+
+      </div>
     </div>
+
   </div>
 
 </template>
 
 <script>
-import {
-  Hooper,
-  Slide,
-  Navigation as HooperNavigation
-} from 'hooper';
-import 'hooper/dist/hooper.css';
 import fitness from "@/api/fitness";
 import moment from "moment";
 
 export default {
   name: "Fitness",
-  components: {
-    Hooper,
-    Slide,
-    HooperNavigation,
-  },
   props: {
     content: String
   },
   data() {
     return {
-      hooperSettings: {
-        itemsToShow: 1.5,
-        centerMode: false,
-      },
       workouts: [],
       workoutData: [],
       buttonActive: [false, true, true],
@@ -184,11 +166,25 @@ export default {
 
 <style scoped>
 
-.slider-box {
-  height: 90%;
-  margin-left: 0.5em;
-  margin-right: 0.5em;
+.scrolling-wrapper-flexbox {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+
+  /* Hide scrollbar */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
+/* Hide scrollbar, safari, chrome, opera*/
+.scrolling-wrapper-flexbox::-webkit-scrollbar {
+  display: none;
+}
+
+.scrolling-wrapper-card {
+  flex: 0 0 auto;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
 
 </style>

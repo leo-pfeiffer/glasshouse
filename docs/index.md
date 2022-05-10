@@ -7,21 +7,13 @@ GitHub repositories:
 - client: [leo-pfeiffer/glasshouse](https://github.com/leo-pfeiffer/glasshouse)
 - back-end: [leo-pfeiffer/glasshouse-backend](https://github.com/leo-pfeiffer/glasshouse-backend)
 
-## 🚧 State of the Project
-
-Work in progress!
-
 Currently I've implemented the following data sources:
 - Spotify
 - Apple Fitness
 - WakaTime
-
-I'm thinking about also implementing:
 - GitHub
 
-Beyond that, I will likely migrate the project from JavaScript to TypeScript at some point.
-
-### 🔥 Motivation
+## 🔥 Motivation
 
 The project is mainly a fun project that I embarqued on to play with some of the data from the apps I use the most. I wanted to build something that I can easily expand on over time if I want to add new apps.
 

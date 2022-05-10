@@ -23,12 +23,12 @@
     <div class="tile is-ancestor">
       <div class="tile is-parent">
         <article class="tile is-child box">
-          <vue-c3 :handler="editorChartHandler" id="editor-chart"></vue-c3>
+          <apexchart type="bar" width="100%" height="200" :options="editorChartOptions" :series="wakaEditors"></apexchart>
         </article>
       </div>
       <div class="tile is-parent">
         <article class="tile is-child box">
-          <vue-c3 :handler="langChartHandler" id="lang-chart"></vue-c3>
+          <apexchart type="bar" width="100%" height="200" :options="langChartOptions" :series="wakaLangs"></apexchart>
         </article>
       </div>
     </div>
@@ -36,12 +36,7 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import VueC3 from 'vue-c3'
 import wakatime from "@/api/wakatime";
-import ColorScheme from 'color-scheme';
-const scheme = new ColorScheme();
-
 
 export default {
   name: "WakaTime",
@@ -49,14 +44,42 @@ export default {
     content: String
   },
   components: {
-    VueC3
   },
   data() {
     return {
-      editorChartHandler: new Vue(),
-      langChartHandler: new Vue(),
       wakaData: {},
       available: false,
+      wakaEditors: [],
+      wakaLangs: [],
+      chartOptions: {
+        chart: {
+          type: 'bar',
+          stacked: true,
+          stackType: '100%'
+        },
+        plotOptions: {
+          bar: {
+            horizontal: true,
+          },
+        },
+        stroke: {
+          width: 1,
+          colors: ['#fff']
+        },
+        xaxis: {categories: [""],},
+        tooltip: {enabled: false,},
+        fill: {
+          opacity: 1
+        },
+        legend: {
+          position: 'top',
+          horizontalAlign: 'left',
+          offsetX: 0
+        },
+        theme: {
+          palette: 'palette10',
+        }
+      },
     }
   },
   computed: {
@@ -66,36 +89,18 @@ export default {
     avgTime: function() {
       return this.wakaData.average / 3600
     },
+    editorChartOptions: function() {
+      const opts = Object.assign({}, this.chartOptions)
+      opts['title'] = {text: 'Editors'}
+      return opts
+    },
+    langChartOptions: function() {
+      const opts = Object.assign({}, this.chartOptions)
+      opts['title'] = {text: 'Languages'}
+      return opts
+    },
   },
   methods: {
-    makeChart: function(columnData, handler, scheme) {
-      const options = {
-        size: {
-          height: 200,
-        },
-        data: {
-          columns: columnData,
-          type: 'donut',
-          empty: {
-            label: {
-              text: "No Data Available"
-            }
-          }
-        },
-        color: {
-          pattern: scheme.colors().map(e => '#' + e)
-        },
-        donut: {
-          label: {
-            show: false,
-          },
-        },
-        legend: {
-          show: true
-        },
-      }
-      handler.$emit('init', options);
-    },
     round: function (num, d) {
       const m = Math.pow(10, d)
       return Math.floor(num * m) / m;
@@ -107,15 +112,13 @@ export default {
       this.wakaData = data
       this.available = true
 
-      const editors = this.wakaData.editors.reduce((a, b) => [... a, [b.name, b.total]], [])
-      const editorScheme = scheme.from_hex('00faff').scheme('contrast');
-      this.makeChart(editors, this.editorChartHandler, editorScheme);
+      this.wakaEditors = this.wakaData.editors
+          .reduce((a, b) => [... a, Object.assign({}, {name: b.name, data: [b.total]})], [])
 
-      let langs = this.wakaData.languages.reduce((a, b) => [... a, [b.name, b.total]], [])
-      langs.sort((a, b) => b[1] > a[1] ? 1 : -1)
-      langs = langs.slice(0, Math.min(5, langs.length))
-      const langScheme = scheme.from_hex('cb21ff').scheme('contrast');
-      this.makeChart(langs, this.langChartHandler, langScheme);
+      this.wakaLangs = this.wakaData.languages
+          .reduce((a, b) => [... a, Object.assign({}, {name: b.name, data: [b.total]})], [])
+          .sort((a, b) => b.data[0] > a.data[0] ? 1 : -1)
+          .slice(0, 5)
     }
   }
 }

@@ -80,6 +80,9 @@ export default {
           position: 'top',
           horizontalAlign: 'left',
           offsetX: 0
+        },
+        theme: {
+          palette: 'palette10',
         }
       },
     }

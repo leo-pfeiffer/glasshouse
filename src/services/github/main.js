@@ -13,7 +13,7 @@ const getStats = function() {
 }
 
 const getLangs = function() {
-    const url = "https://github-stats-rest.vercel.app/api/top-langs/?username=leo-pfeiffer&layout=compact&hide=Jupyter%20Notebook,html&exclude_repo=Functional-Programming-in-Scala"
+    const url = "https://github-stats-rest.vercel.app/api/top-langs/?username=leo-pfeiffer&layout=compact&hide=Jupyter%20Notebook,HTML,CSS&exclude_repo=Functional-Programming-in-Scala"
     return axios.get(url)
         .then((res) => res.data)
         .catch((err) => console.error(err))

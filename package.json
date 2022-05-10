@@ -9,16 +9,10 @@
   },
   "dependencies": {
     "apexcharts": "^3.35.2",
-    "c3": "^0.7.20",
-    "charts.css": "^0.9.0",
-    "color-scheme": "^1.0.1",
     "core-js": "^3.6.5",
-    "hooper": "^0.3.4",
     "moment": "^2.29.1",
     "vue": "^2.6.11",
-    "vue-apexcharts": "^1.6.2",
-    "vue-c3": "^1.2.11",
-    "vue-slick-carousel": "^1.0.6"
+    "vue-apexcharts": "^1.6.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

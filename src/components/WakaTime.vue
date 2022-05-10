@@ -36,11 +36,7 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import wakatime from "@/api/wakatime";
-// import ColorScheme from 'color-scheme';
-// const scheme = new ColorScheme();
-
 
 export default {
   name: "WakaTime",
@@ -51,8 +47,6 @@ export default {
   },
   data() {
     return {
-      editorChartHandler: new Vue(),
-      langChartHandler: new Vue(),
       wakaData: {},
       available: false,
       wakaEditors: [],
@@ -107,34 +101,6 @@ export default {
     },
   },
   methods: {
-    makeChart: function(columnData, handler, scheme) {
-      const options = {
-        size: {
-          height: 200,
-        },
-        data: {
-          columns: columnData,
-          type: 'donut',
-          empty: {
-            label: {
-              text: "No Data Available"
-            }
-          }
-        },
-        color: {
-          pattern: scheme.colors().map(e => '#' + e)
-        },
-        donut: {
-          label: {
-            show: false,
-          },
-        },
-        legend: {
-          show: true
-        },
-      }
-      handler.$emit('init', options);
-    },
     round: function (num, d) {
       const m = Math.pow(10, d)
       return Math.floor(num * m) / m;
@@ -148,16 +114,11 @@ export default {
 
       this.wakaEditors = this.wakaData.editors
           .reduce((a, b) => [... a, Object.assign({}, {name: b.name, data: [b.total]})], [])
-      // const editorScheme = scheme.from_hex('00faff').scheme('contrast');
-      // this.makeChart(editors, this.editorChartHandler, editorScheme);
 
       this.wakaLangs = this.wakaData.languages
           .reduce((a, b) => [... a, Object.assign({}, {name: b.name, data: [b.total]})], [])
           .sort((a, b) => b.data[0] > a.data[0] ? 1 : -1)
           .slice(0, 5)
-
-      // const langScheme = scheme.from_hex('cb21ff').scheme('contrast');
-      // this.makeChart(langs, this.langChartHandler, langScheme);
     }
   }
 }

@@ -35,7 +35,7 @@
       </div>
     </div>
     <div class="box">
-      <apexchart type="bar" width="100%" height="200" :options="chartOptions" :series="githubLanguages"></apexchart>
+      <apexchart type="bar" width="100%" height="250" :options="chartOptions" :series="githubLanguages"></apexchart>
     </div>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <a class="box" :href="src">
+  <a :href="src">
     <img :src="image" :alt="name">
     <p>{{ name }}</p>
   </a>

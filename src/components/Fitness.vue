@@ -48,7 +48,7 @@
 
     <div class="scrolling-wrapper-flexbox box">
 
-      <div class="scrolling-wrapper-card box" v-for="w in workouts" v-bind:key="w.start.toString()">
+      <div class="scrolling-wrapper-card box" v-for="(w, i) in workouts" v-bind:key="i">
 
         <p class="title is-6">{{ w.name }}</p>
         <p class="subtitle is-6">{{ getDate(w.start) }}</p>

@@ -71,7 +71,7 @@ const retrieve = async function (days) {
 
 const diffMins = function (date1, date2) {
     const diffMs = date2 - date1
-    return Math.round(((diffMs % 86400000) % 3600000) / 60000);
+    return Math.round(diffMs / 1000 / 60);
 }
 
 const getWorkoutProportions = function(workouts) {

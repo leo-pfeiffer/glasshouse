@@ -1,6 +1,4 @@
-/.env
-/prod.env
-/encoded.env
+*.env
 /app.yaml
 /node_modules/
 /.idea/

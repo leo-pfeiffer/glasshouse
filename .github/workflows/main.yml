@@ -37,3 +37,16 @@ jobs:
           
       - id: 'test'
         run: 'curl "${{ steps.deployment.outputs.url }}"'
+
+      - id: 'heroku-env'
+        env:
+          HEROKU_ENV: ${{ secrets.HEROKU_ENV }}
+        run: echo $DOT_ENV | base64 --decode > .env
+
+      - id: 'heroku'
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          env_file: ".env"

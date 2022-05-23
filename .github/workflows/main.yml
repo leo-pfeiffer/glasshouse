@@ -10,7 +10,7 @@ on:
 jobs:
   deploy:
   
-    name: Deploy to App Engine
+    name: Deployment
     runs-on: ubuntu-latest
     steps:
     
@@ -41,7 +41,10 @@ jobs:
       - id: 'heroku-env'
         env:
           HEROKU_ENV: ${{ secrets.HEROKU_ENV }}
-        run: echo $DOT_ENV | base64 --decode > .env
+        run: |
+          echo $DOT_ENV | base64 --decode > .env
+          ls -la
+          cat .env
 
       - id: 'heroku'
         uses: akhileshns/heroku-deploy@v3.12.12

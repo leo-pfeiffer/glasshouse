@@ -1,7 +1,8 @@
 const moment = require("moment");
+const {BASE_URL} = require("@/api/settings");
 
 const retrieve = async function (days) {
-    let arr = await fetch("https://glasshouse-341514.nw.r.appspot.com/api/v1/fitness")
+    let arr = await fetch(`${BASE_URL}/api/v1/fitness`)
         .then(res => res.json())
         .catch(() => [])
     // let arr = [{
@@ -71,7 +72,7 @@ const retrieve = async function (days) {
 
 const diffMins = function (date1, date2) {
     const diffMs = date2 - date1
-    return Math.round(((diffMs % 86400000) % 3600000) / 60000);
+    return Math.round(diffMs / 1000 / 60);
 }
 
 const getWorkoutProportions = function(workouts) {

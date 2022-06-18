@@ -1,6 +1,8 @@
 const moment = require("moment");
+const {BASE_URL} = require("@/api/settings");
+
 const retrieve = async function () {
-    let obj = await fetch("https://glasshouse-341514.nw.r.appspot.com/api/v1/wakatime")
+    let obj = await fetch(`${BASE_URL}/api/v1/wakatime`)
         .then(res => res.json())
         .catch(() => {})
     // let obj = {

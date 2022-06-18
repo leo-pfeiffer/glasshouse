@@ -1,4 +1,4 @@
-const BASE_URL = "http://209.182.235.76:5720"
+const BASE_URL = "https://glasshouse-341514.nw.r.appspot.com"
 
 module.exports = {
     BASE_URL

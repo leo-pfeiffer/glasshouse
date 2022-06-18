@@ -1,7 +1,8 @@
 const moment = require("moment");
+const {BASE_URL} = require("@/api/settings");
 
 const retrieve = async function (days) {
-    let arr = await fetch("https://glasshouse-341514.nw.r.appspot.com/api/v1/fitness")
+    let arr = await fetch(`${BASE_URL}/api/v1/fitness`)
         .then(res => res.json())
         .catch(() => [])
     // let arr = [{

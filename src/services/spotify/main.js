@@ -6,7 +6,7 @@ const {getToday, secondsUntilEndOfDay} = require("../../utils/datetime");
 
 const K_ACCESS_TOKEN = 'access-token'
 
-const retry = function(req, res, options) {
+const retry = function(options) {
     return new Promise(function(resolve, reject) {
         return request.get(options, function (error, response, body) {
             if (error) return reject(error)
@@ -16,7 +16,7 @@ const retry = function(req, res, options) {
     })
 }
 
-const spotifyClient = async function(req, res, url) {
+const spotifyClient = async function(url) {
 
     const options = () => {
         return {
@@ -36,8 +36,8 @@ const spotifyClient = async function(req, res, url) {
             if (body.hasOwnProperty('error') && body.error.status === 401) {
 
                 // refresh token
-                await refresh(req, res);
-                returnVal = await retry(req, res, options())
+                await refresh();
+                returnVal = await retry(options())
                 resolve(returnVal)
 
             } else {
@@ -47,43 +47,43 @@ const spotifyClient = async function(req, res, url) {
     })
 }
 
-const getData = async function (req, res, url, ttl) {
+const getData = async function (url, ttl) {
 
     const key = hashString(getToday().toString() + url)
 
     if (cache.has(key)) return cache.get(key)
 
-    const entry = await spotifyClient(req, res, url)
+    const entry = await spotifyClient(url)
     cache.set(key, entry, ttl)
     return entry
 }
 
-const getTopArtists = function(req, res) {
+const getTopArtists = function() {
     const url = 'https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=5'
     const ttl = secondsUntilEndOfDay()
-    return getData(req, res, url, ttl)
+    return getData(url, ttl)
 }
 
-const getTopTracks = function(req, res) {
+const getTopTracks = function() {
     const url = 'https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=5'
     const ttl = secondsUntilEndOfDay()
-    return getData(req, res, url, ttl)
+    return getData(url, ttl)
 }
 
-const getRecentlyPlayed = function(req, res) {
+const getRecentlyPlayed = function() {
     const url = 'https://api.spotify.com/v1/me/player/recently-played?limit=5'
     const ttl = 30
-    return getData(req, res, url, ttl)
+    return getData(url, ttl)
 }
 
-const getCurrentlyPlaying = async function(req, res) {
+const getCurrentlyPlaying = async function() {
 
     const key = 'currently-playing'
 
     if (cache.has(key)) return cache.get(key)
 
     const url = 'https://api.spotify.com/v1/me/player/currently-playing?market=GB&additional_types=track%2Cepisode'
-    const raw = await spotifyClient(req, res, url)
+    const raw = await spotifyClient(url)
     const entry = {}
 
     if (Object.keys(raw).length === 0) {

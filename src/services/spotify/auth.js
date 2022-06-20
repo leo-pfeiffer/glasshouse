@@ -2,14 +2,13 @@ require('dotenv').config();
 const request = require('request'); // "Request" library
 const querystring = require('querystring');
 const Cache = require('../../utils/cache')
+const cookie = require("cookie");
 
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;                      // Your client id
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;              // Your secret
 
 const BASE_URL = process.env.BASE_URL || 'http://localhost:' + (process.env.PORT || 8080)
 const REDIRECT_URI = BASE_URL + '/api/v1/spotify/callback'; // Your redirect uri
-
-console.log(REDIRECT_URI)
 
 const cache = new Cache();
 
@@ -38,9 +37,14 @@ const generateRandomString = function (length) {
 
 const stateKey = 'spotify_auth_state';
 
-const login = function (req, res) {
+const login = function () {
     const state = generateRandomString(16);
-    res.cookie(stateKey, state);
+
+    const myCookie = cookie.serialize(stateKey, state, {
+        secure: true,
+        httpOnly: true,
+        path: '/',
+    })
 
     const queryParams = querystring.stringify({
         response_type: 'code',
@@ -50,11 +54,17 @@ const login = function (req, res) {
         state: state
     })
 
-    res.redirect('https://accounts.spotify.com/authorize?' + queryParams);
+    return {
+        statusCode: 302,
+        headers: {
+            'Set-Cookie': myCookie,
+            Location: 'https://accounts.spotify.com/authorize?' + queryParams
+        }
+    }
 }
 
-const callback = function (req, res) {
-    const code = req.query.code || null;
+const callback = function (event) {
+    const code = event.queryStringParameters.code || null;
 
     const authOptions = {
         url: 'https://accounts.spotify.com/api/token',
@@ -69,27 +79,30 @@ const callback = function (req, res) {
         json: true
     };
 
-    request.post(authOptions, function (error, response, body) {
-        if (!error && response.statusCode === 200) {
-            const accessToken = body.access_token;
-            const refreshToken = body.refresh_token;
+    return new Promise(function(resolve, reject) {
 
-            cache.set(K_ACCESS_TOKEN, accessToken)
+        request.post(authOptions, function (error, response, body) {
+            if (!error && response.statusCode === 200) {
+                const accessToken = body.access_token;
+                const refreshToken = body.refresh_token;
 
-            res.send({'Access Token': accessToken, 'Refresh Token': refreshToken})
-        }
-        // Invalid token
-        else {
-            res.redirect('/#' + querystring.stringify({error: 'invalid_token'}));
-        }
-    });
+                cache.set(K_ACCESS_TOKEN, accessToken)
+                resolve(body)
+            }
+            // Invalid token
+            else {
+                reject(error)
+
+            }
+        });
+    })
 }
 
-const refresh = function (req, res) {
+const refresh = function () {
 
     console.log("Refreshing token")
 
-    const refresh_token = req.query.refresh_token || cache.get(K_REFRESH_TOKEN);
+    const refresh_token = cache.get(K_REFRESH_TOKEN);
 
     if (refresh_token === undefined || refresh_token === null) {
         throw new Error("No token provided")

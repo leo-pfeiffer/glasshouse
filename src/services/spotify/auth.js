@@ -3,6 +3,7 @@ const request = require('request'); // "Request" library
 const querystring = require('querystring');
 const Cache = require('../../utils/cache')
 const cookie = require("cookie");
+const {cors_headers} = require("../../utils/cors");
 
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;                      // Your client id
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;              // Your secret

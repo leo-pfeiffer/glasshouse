@@ -1,5 +1,6 @@
 const {write} = require("../services/fitness/main");
 const {authenticateString} = require("../auth");
+const {cors_headers} = require("../utils/cors");
 
 module.exports.handler = async (event, context) => {
 
@@ -31,7 +32,8 @@ module.exports.handler = async (event, context) => {
         await write(JSON.parse(event.body))
         return {
             statusCode: 200,
-            body: "Success"
+            body: "Success",
+            headers: cors_headers
         }
     } catch (e) {
         console.error(e);

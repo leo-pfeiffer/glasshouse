@@ -8,7 +8,6 @@ auth[user] = password;
 const authenticateString = function(authString) {
     const plain = atob(authString.split("Basic ")[1]);
     const arr = plain.split(":");
-    console.log(arr)
     if (arr.length !== 2) {
         return false
     }

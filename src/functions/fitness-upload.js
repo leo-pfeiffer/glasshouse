@@ -16,14 +16,14 @@ module.exports.handler = async (event, context) => {
         if (!authenticateString(event.headers.authorization)) {
             return {
                 statusCode: 401,
-                body: "Unauthorized"
+                body: "Unauthorized."
             }
         }
     } catch (e) {
         console.error(e)
         return {
             statusCode: 401,
-            body: "Unauthorized"
+            body: "Unauthorized. " + e.message
         }
     }
 

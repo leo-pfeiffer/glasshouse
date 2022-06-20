@@ -1,9 +1,9 @@
-const {loginServerless} = require("../services/spotify/auth");
+const {login} = require("../services/spotify/auth");
 
 module.exports.handler = async (event, context) => {
 
     try {
-        return loginServerless()
+        return login()
     } catch (e) {
         return {
             statusCode: 500,

@@ -1,9 +1,9 @@
-const {callbackServerless} = require("../services/spotify/auth");
+const {callback} = require("../services/spotify/auth");
 
 module.exports.handler = async (event, context) => {
 
     try {
-        const tokens = await callbackServerless(event)
+        const tokens = await callback(event)
         return {
             statusCode: 200,
             body: JSON.stringify({'Access Token': tokens.access_token, 'Refresh Token': tokens.refresh_token})

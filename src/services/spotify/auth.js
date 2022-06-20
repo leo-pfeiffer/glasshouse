@@ -10,8 +10,6 @@ const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;              // Your se
 const BASE_URL = process.env.BASE_URL || 'http://localhost:' + (process.env.PORT || 8080)
 const REDIRECT_URI = BASE_URL + '/api/v1/spotify/callback'; // Your redirect uri
 
-console.log(REDIRECT_URI)
-
 const cache = new Cache();
 
 const K_ACCESS_TOKEN = 'access-token'
@@ -39,22 +37,7 @@ const generateRandomString = function (length) {
 
 const stateKey = 'spotify_auth_state';
 
-const login = function (req, res) {
-    const state = generateRandomString(16);
-    res.cookie(stateKey, state);
-
-    const queryParams = querystring.stringify({
-        response_type: 'code',
-        client_id: CLIENT_ID,
-        scope: SCOPE,
-        redirect_uri: REDIRECT_URI,
-        state: state
-    })
-
-    res.redirect('https://accounts.spotify.com/authorize?' + queryParams);
-}
-
-const loginServerless = function () {
+const login = function () {
     const state = generateRandomString(16);
 
     const myCookie = cookie.serialize(stateKey, state, {
@@ -80,39 +63,7 @@ const loginServerless = function () {
     }
 }
 
-const callback = function (req, res) {
-    const code = req.query.code || null;
-
-    const authOptions = {
-        url: 'https://accounts.spotify.com/api/token',
-        form: {
-            code: code,
-            redirect_uri: REDIRECT_URI,
-            grant_type: 'authorization_code'
-        },
-        headers: {
-            'Authorization': 'Basic ' + (Buffer.from(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64'))
-        },
-        json: true
-    };
-
-    request.post(authOptions, function (error, response, body) {
-        if (!error && response.statusCode === 200) {
-            const accessToken = body.access_token;
-            const refreshToken = body.refresh_token;
-
-            cache.set(K_ACCESS_TOKEN, accessToken)
-
-            res.send({'Access Token': accessToken, 'Refresh Token': refreshToken})
-        }
-        // Invalid token
-        else {
-            res.redirect('/#' + querystring.stringify({error: 'invalid_token'}));
-        }
-    });
-}
-
-const callbackServerless = function (event) {
+const callback = function (event) {
     const code = event.queryStringParameters.code || null;
 
     const authOptions = {
@@ -181,5 +132,5 @@ const refresh = function () {
 }
 
 module.exports = {
-    login, callback, refresh, cache, loginServerless, callbackServerless
+    login, callback, refresh, cache
 }

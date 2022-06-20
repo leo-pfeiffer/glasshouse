@@ -1,4 +1,4 @@
-const BASE_URL = "https://glasshouse-341514.nw.r.appspot.com"
+const BASE_URL = "https://glasshouse-backend.netlify.com"
 
 module.exports = {
     BASE_URL

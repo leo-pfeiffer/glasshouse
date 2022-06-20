@@ -6,7 +6,8 @@ const auth = {}
 auth[user] = password;
 
 const authenticateString = function(authString) {
-    const plain = atob(authString.split("Basic ")[1]);
+    const base64encoded = authString.split("Basic ")[1]
+    const plain = Buffer.from(base64encoded, 'base64').toString();
     const arr = plain.split(":");
     if (arr.length !== 2) {
         return false

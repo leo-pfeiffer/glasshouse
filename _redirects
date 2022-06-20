@@ -1,4 +1,4 @@
-/api/v1/index /.netlify/functions/index 200
+/ /.netlify/functions/index 200
 /api/v1/fitness /.netlify/functions/fitness 200
 /api/v1/fitness-upload /.netlify/functions/fitness-upload 200
 /api/v1/wakatime /.netlify/functions/wakatime 200

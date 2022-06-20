@@ -1,0 +1,11 @@
+/api/v1/index /.netlify/functions/index 200
+/api/v1/fitness /.netlify/functions/fitness 200
+/api/v1/fitness-upload /.netlify/functions/fitness-upload 200
+/api/v1/wakatime /.netlify/functions/wakatime 200
+/api/v1/github /.netlify/functions/github 200
+/api/v1/spotify/top-tracks /.netlify/functions/spotify-top-tracks 200
+/api/v1/spotify/top-artists /.netlify/functions/spotify-top-artists 200
+/api/v1/spotify/currently-playing /.netlify/functions/spotify-currently-playing 200
+/api/v1/spotify/recently-played /.netlify/functions/spotify-recently-played 200
+/api/v1/spotify/login /.netlify/functions/spotify-login 200
+/api/v1/spotify/callback /.netlify/functions/spotify-callback 200

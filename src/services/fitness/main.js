@@ -25,8 +25,28 @@ const cleanWorkout = function(workout) {
     }
 }
 
+/**
+ * If workouts are tracked by multiple apps, they may appear multiple times.
+ * The start and end times will be the same, thus we can deduplicate them by
+ * only keeping one instance.
+ * */
+const deduplicate = function(workouts) {
+    const encountered = {}
+    const out = []
+
+    for (const w of workouts) {
+        const key = w.start.toString() + w.end.toString()
+        if (!(key in encountered)) {
+            encountered[key] = true
+            out.push(w)
+        }
+    }
+    return out
+}
+
 const write = async function (rawWorkouts) {
-    getWorkouts(rawWorkouts).map(cleanWorkout).map(w => insertEntry(w, COLLECTION))
+    const clean = getWorkouts(rawWorkouts).map(cleanWorkout)
+    deduplicate(clean).map(w => insertEntry(w, COLLECTION))
 }
 
 /**

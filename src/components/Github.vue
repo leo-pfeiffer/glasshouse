@@ -104,7 +104,6 @@ export default {
       const runs = Object.entries(langs)
           .map(e => e[1])
           .sort((a, b) => b["size"] - a["size"])
-      console.log(runs)
 
       return runs.slice(0, 5)
           .map(e => {

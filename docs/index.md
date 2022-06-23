@@ -19,12 +19,9 @@ The project is mainly a fun project that I embarqued on to play with some of the
 
 ## 🔧 Technologies
 
-Most of the project is written in JavaScript, although I intend to migrate everything to TypeScript in the near future.
-
 ### Back-end
-- The server is written with **Node.js** together with **Express** to build the API.
+- The backend runs on Netlify using the serverless **Netlify Functions** capability. I had initially deployed the back-end on **Google App Engine**.
 - I use **MongoDB** for persistent storage of my Apple Health Data.
-- The back-end runs on on **Google App Engine**.
 
 ### Front-end
 - The client is written in **Vue.js**.
@@ -54,17 +51,20 @@ The second highlight of the implementation was the integration of the Apple Heal
 
 Therefore, the fitness service of the project needed to process incoming data from the Health Auto Export app's post requests and store it in the MongoDB. The app allows you to run these exports on a regular basis, so as of now, my Apple Health data is posted to the server once a day. When the client requests the fitness data, the fitness service retrieves it from the MongoDB.
 
-### Caching
-To reduce the load on the server and to reduce response time, I implemented caching for all API endpoints. As of now, I use the fairly basic node-cache library, which actually serves the purpose very well. Something more powerful such as Redis would certainly scale better, but for the scope of the application node-cache very much does the trick. 
+### GitHub Service
+For the GitHub service, I forked the [GitHub README Stats](https://github.com/anuraghazra/github-readme-stats) and converted it into a [REST API](https://github.com/leo-pfeiffer/github-readme-stats), which I deployed on Vercel. Glasshouse calls those endpoints to gather information about my activity on GitHub.
 
-Caching is handled by the microservices depending on the data requested. For example, the Spotify service caches the top track and top artists data until the end of the day, whereas the recently played and currently playing data is only cached for 30 seconds. This helps the response time of the server while still keeping the data sufficiently up-to-date.
+### Caching
+ℹ️ Due to the stateless nature of Netlify Functions, caching with node-cache won't work. Instead, I'd need to use a service such as Redis. 
+
+For the previous version, which was deployed on GCP, I implemented caching to reduce the load on the server and to reduce response time. I used the fairly basic node-cache library, which actually served the purpose very well. Something more powerful such as Redis would certainly have scaled better, but for the scope of the application node-cache very much does the trick. Now that I use the serverless deploymnet, Redis would be required.
+
+Caching was handled by the microservices depending on the data requested. For example, the Spotify service cached the top track and top artists data until the end of the day, whereas the recently played and currently playing data was only cached for 30 seconds.
 
 ### Deployment
-The back-end server is deployed on Google App Engine. This was the first time I used any GCP product, so it took me some time to find my way through the platform, but I eventually managed! 
+Initially, I had deployed the back-end on Google App Engine, which worked well, however the deployment and maintenance as pretty laborios for a small API such as this. Thus, I decided to try out Neltify's serverless capabilities for the first time, with Netlify Functions. Netlify Functions allows you to deploy an API without actually running a server.
 
-I ran into a curious issue when I tried to figure out how to set my environment variables (stored in a `.env` file) during my CI/CD workflow on GitHub. App Engine asks you to deliver an `app.yaml` file, in which these can be specified. But since the `.env` file contains private API keys, I'd rather not push it to my public repo.
-
-I eventually solved this by setting a base64 encoded version of my `.env` file as a secret in the GitHub action workflow. During the deployment, the `app.yaml` file is created dynamically by decoding the secret and appending it to the rest of the `app.yaml` file. This is certainly a bit of a hack but it saved me from having to add a dozen environment variables as separate secrets. It's not pretty - but it works and is certainly better than commiting my `.env` file. 
+It turns out that I actually didn't need to change much to move to serverless deployment. Essentially, I pointed the Netlfiy specific functions to the same modules that the Express endpoints had pointed to. Then I could remove the Express server, and that's it! For a super small API such as this, the serverless deployment is certainly advantageous as it is much simpler to set up, and more cost effective.
 
 
 ## 📚 Resources
@@ -72,6 +72,7 @@ I eventually solved this by setting a base64 encoded version of my `.env` file a
 + [Spotify Web API](https://developer.spotify.com/documentation/web-api/)
 + [WakaTime API](https://wakatime.com/developers)
 + [MongoDB](https://www.mongodb.com/)
-+ [Google App Engine](https://cloud.google.com/appengine)
 + [Netlify](https://www.netlify.com)
++ [Netlify Functions](https://www.netlify.com/products/functions/)
++ [Google App Engine](https://cloud.google.com/appengine)
 + [Bulma](https://bulma.io/)

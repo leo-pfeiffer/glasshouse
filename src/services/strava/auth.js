@@ -70,6 +70,7 @@ const callback = function (event) {
             if (!error && response.statusCode === 200) {
                 const accessToken = body.access_token;
                 const refreshToken = body.refresh_token;
+                cache.set(K_ACCESS_TOKEN, accessToken)
                 resolve(body)
             }
             // Invalid token

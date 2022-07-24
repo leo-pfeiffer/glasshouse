@@ -12,3 +12,4 @@
 /api/v1/strava/login /.netlify/functions/strava-login 200
 /api/v1/strava/callback /.netlify/functions/strava-callback 200
 /api/v1/strava/athlete /.netlify/functions/strava-athlete 200
+/api/v1/strava/activities /.netlify/functions/strava-activities 200

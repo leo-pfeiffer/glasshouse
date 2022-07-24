@@ -18,7 +18,7 @@ const K_REFRESH_TOKEN = 'refresh-token'
 cache.set(K_ACCESS_TOKEN, process.env.STRAVA_BASE_ACCESS_TOKEN)
 cache.set(K_REFRESH_TOKEN, process.env.STRAVA_BASE_REFRESH_TOKEN)
 
-const SCOPE = 'read_all,activity:read_all,profile:read_all'
+const SCOPE = 'read,read_all,activity:read,activity:read_all,profile:read_all'
 
 const stateKey = 'strava_auth_state';
 

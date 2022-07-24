@@ -3,7 +3,7 @@ const request = require('request');
 const {cache, refresh} = require("./auth");
 const hashString = require("../../utils/hashing");
 const retry = require("../../utils/retry");
-const {getToday, secondsUntilEndOfDay} = require("../../utils/datetime");
+const {getToday, secondsUntilEndOfDay, minusOneMonth} = require("../../utils/datetime");
 
 
 const K_ACCESS_TOKEN = 'access-token'
@@ -44,7 +44,12 @@ const getData = async function (url, ttl) {
 
     const key = hashString(getToday().toString() + url)
 
-    if (cache.has(key)) return cache.get(key)
+    if (cache.has(key)) {
+        console.log("Yay")
+        return cache.get(key)
+    }
+
+    console.log("Booh")
 
     const entry = await stravaClient(url)
     cache.set(key, entry, ttl)
@@ -57,7 +62,17 @@ const getAthlete = function() {
     return getData(url, ttl)
 }
 
+const getActivities = function() {
+    const date = minusOneMonth(new Date())
+
+    const epochTimestamp = Math.floor(date / 1000)
+
+    const url = `https://www.strava.com/api/v3/athlete/activities?after=${epochTimestamp}&per_page=100`
+    const ttl = secondsUntilEndOfDay()
+    return getData(url, ttl)
+}
+
 
 module.exports = {
-    getAthlete
+    getAthlete, getActivities
 }

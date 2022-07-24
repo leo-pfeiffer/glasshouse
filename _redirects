@@ -9,3 +9,6 @@
 /api/v1/spotify/recently-played /.netlify/functions/spotify-recently-played 200
 /api/v1/spotify/login /.netlify/functions/spotify-login 200
 /api/v1/spotify/callback /.netlify/functions/spotify-callback 200
+/api/v1/strava/login /.netlify/functions/strava-login 200
+/api/v1/strava/callback /.netlify/functions/strava-callback 200
+/api/v1/strava/athlete /.netlify/functions/strava-athlete 200

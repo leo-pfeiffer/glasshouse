@@ -21,11 +21,18 @@
         />
 
         <Article
-            title="Apple Fitness"
-            content="Workouts from the last 14 days."
-            img="applefitness.png"
-            type="fitness"
+            title="Strava"
+            content="Strava activities from the last 14 days."
+            img="strava.png"
+            type="strava"
         />
+
+<!--        <Article-->
+<!--            title="Apple Fitness"-->
+<!--            content="Workouts from the last 14 days."-->
+<!--            img="applefitness.png"-->
+<!--            type="fitness"-->
+<!--        />-->
 
         <Article
             title="WakaTime"

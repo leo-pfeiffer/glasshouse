@@ -62,14 +62,36 @@ const getAthlete = function() {
     return getData(url, ttl)
 }
 
-const getActivities = function() {
+const getActivities = async function() {
     const date = minusOneMonth(new Date())
 
     const epochTimestamp = Math.floor(date / 1000)
 
     const url = `https://www.strava.com/api/v3/athlete/activities?after=${epochTimestamp}&per_page=100`
     const ttl = secondsUntilEndOfDay()
-    return getData(url, ttl)
+    const activities = await getData(url, ttl)
+
+    console.log(activities)
+
+    return activities.map(activityTransform).filter(e => e !== null);
+
+}
+
+const activityTransform = function (activity) {
+    try {
+        const transformed = {}
+        transformed['name'] = activity['name']
+        transformed['duration'] = activity['moving_time'] / 60  // duration in minutes
+        transformed['type'] = activity['type']
+        transformed['max_hr'] = activity['max_heartrate']
+        transformed['avg_hr'] = activity['average_heartrate']
+        transformed['distance'] = activity['distance']
+        transformed['start_date'] = activity['start_date']
+        return transformed
+    } catch (e) {
+        return null;
+    }
+
 }
 
 

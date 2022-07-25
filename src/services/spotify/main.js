@@ -3,18 +3,11 @@ const request = require('request');
 const {cache, refresh} = require("./auth");
 const hashString = require("../../utils/hashing");
 const {getToday, secondsUntilEndOfDay} = require("../../utils/datetime");
+const retry = require("../../utils/retry");
+
 
 const K_ACCESS_TOKEN = 'access-token'
 
-const retry = function(options) {
-    return new Promise(function(resolve, reject) {
-        return request.get(options, function (error, response, body) {
-            if (error) return reject(error)
-            if (response.statusCode === 204) return resolve({})
-            return resolve(body)
-        })
-    })
-}
 
 const spotifyClient = async function(url) {
 

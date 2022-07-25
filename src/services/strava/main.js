@@ -45,11 +45,8 @@ const getData = async function (url, ttl) {
     const key = hashString(getToday().toString() + url)
 
     if (cache.has(key)) {
-        console.log("Yay")
         return cache.get(key)
     }
-
-    console.log("Booh")
 
     const entry = await stravaClient(url)
     cache.set(key, entry, ttl)
@@ -70,8 +67,6 @@ const getActivities = async function() {
     const url = `https://www.strava.com/api/v3/athlete/activities?after=${epochTimestamp}&per_page=100`
     const ttl = secondsUntilEndOfDay()
     const activities = await getData(url, ttl)
-
-    console.log(activities)
 
     return activities.map(activityTransform).filter(e => e !== null);
 

@@ -22,12 +22,15 @@ const stravaClient = async function(url) {
     // make the actual request
     return new Promise((resolve, reject) => {
         request.get(options(), async function (error, response, body) {
-            if (error) return reject(error)
-            if (response.statusCode === 204) return resolve({})
+            if (error) {
+                return reject(error)
+            }
+            if (response.statusCode === 204) {
+                return resolve({})
+            }
 
             let returnVal = body
-            if (body.hasOwnProperty('error') && body.error.status === 401) {
-
+            if (response.statusCode === 401) {
                 // refresh token
                 await refresh();
                 returnVal = await retry(options())

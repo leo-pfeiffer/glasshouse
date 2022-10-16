@@ -15,6 +15,7 @@
     "netlify-cli": "^10.5.1",
     "node-cache": "^5.1.2",
     "path": "^0.12.7",
+    "redis": "^4.2.0",
     "request": "^2.88.2",
     "wakatime-client": "^2.7.0"
   }

@@ -1,9 +1,11 @@
 const mainService = require("../services/strava/main");
 const {cors_headers} = require("../utils/cors");
+const {setCache, withCache} = require("../utils/redis-cache");
 
-module.exports.handler = async (event, context) => {
+const stravaActivities = async (event, context) => {
 
     const data = await mainService.getActivities();
+    await setCache(event.rawUrl, JSON.stringify(data), 3600)
 
     return {
         statusCode: 200,
@@ -11,3 +13,5 @@ module.exports.handler = async (event, context) => {
         headers: cors_headers
     }
 }
+
+module.exports.handler = (event, context) => withCache(stravaActivities)(event, context);

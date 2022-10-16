@@ -2,10 +2,10 @@ const mainService = require("../services/strava/main");
 const {cors_headers} = require("../utils/cors");
 const {setCache, withCache} = require("../utils/redis-cache");
 
-const myFunc = async (event, context) => {
+const stravaActivities = async (event, context) => {
 
     const data = await mainService.getActivities();
-    await setCache(event.rawUrl, JSON.stringify(data), 300)
+    await setCache(event.rawUrl, JSON.stringify(data), 3600)
 
     return {
         statusCode: 200,
@@ -14,4 +14,4 @@ const myFunc = async (event, context) => {
     }
 }
 
-module.exports.handler = (event, context) => withCache(myFunc)(event, context);
+module.exports.handler = (event, context) => withCache(stravaActivities)(event, context);

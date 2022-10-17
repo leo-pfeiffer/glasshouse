@@ -4,7 +4,6 @@ const querystring = require('querystring');
 const Cache = require('../../utils/cache')
 const generateRandomString = require('../../utils/generate-random-string')
 const cookie = require("cookie");
-const {cors_headers} = require("../../utils/cors");
 
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;                      // Your client id
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;              // Your secret

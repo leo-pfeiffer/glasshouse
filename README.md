@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # glasshouse
 
 Glasshouse is a data dashboard where I gather data from apps I use everyday.

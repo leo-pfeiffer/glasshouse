@@ -1,6 +1,4 @@
 / /.netlify/functions/index 200
-/api/v1/fitness /.netlify/functions/fitness 200
-/api/v1/fitness-upload /.netlify/functions/fitness-upload 200
 /api/v1/wakatime /.netlify/functions/wakatime 200
 /api/v1/github /.netlify/functions/github 200
 /api/v1/spotify/top-tracks /.netlify/functions/spotify-top-tracks 200

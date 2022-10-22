@@ -1,4 +1,3 @@
-const moment = require("moment");
 const {API_URL} = require("@/utils/settings");
 
 const retrieve = async function () {
@@ -6,7 +5,7 @@ const retrieve = async function () {
         .then(res => res.json())
         .catch(() => {})
 
-    obj['date'] = moment(obj.date).toDate();
+    obj['date'] = new Date(obj.date)
 
     return obj
 }

@@ -13,7 +13,6 @@
     "cookie": "^0.5.0",
     "core-js": "^3.6.5",
     "dotenv": "^8.2.0",
-    "moment": "^2.29.1",
     "mongodb": "^3.6.4",
     "mongoose": "^5.11.17",
     "netlify-cli": "^10.5.1",

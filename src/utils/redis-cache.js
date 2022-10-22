@@ -54,7 +54,6 @@ const withCache = func => (a, b) => {
     }
 
     const proxy = new Proxy(func, handler)
-    console.log("after proxy")
 
     return proxy.apply(this, [a, b])
 }

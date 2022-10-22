@@ -1,4 +1,4 @@
-const {BASE_URL} = require("@/api/settings");
+const {API_URL} = require("@/utils/settings");
 const retrieve = function (url) {
     return fetch(url)
         .then(res => res.json())
@@ -7,27 +7,27 @@ const retrieve = function (url) {
 }
 
 const getCurrentlyPlaying = function () {
-    const url = `${BASE_URL}/api/v1/spotify/currently-playing`
+    const url = `${API_URL}/api/v1/spotify/currently-playing`
     return retrieve(url)
 }
 
 
 const getTopArtists = async function () {
-    const url = `${BASE_URL}/api/v1/spotify/top-artists`
+    const url = `${API_URL}/api/v1/spotify/top-artists`
     let artists = await retrieve(url)
     artists = artists.items
     return artists.slice(0, Math.min(5, artists.length))
 }
 
 const getTopTracks = async function () {
-    const url = `${BASE_URL}/api/v1/spotify/top-tracks`
+    const url = `${API_URL}/api/v1/spotify/top-tracks`
     let tracks = await retrieve(url)
     tracks = tracks.items
     return tracks.slice(0, Math.min(5, tracks.length))
 }
 
 const getRecentlyPlayed = async function () {
-    const url = `${BASE_URL}/api/v1/spotify/recently-played`
+    const url = `${API_URL}/api/v1/spotify/recently-played`
     let tracks = await retrieve(url)
     tracks = tracks.items
     return tracks.slice(0, Math.min(5, tracks.length))

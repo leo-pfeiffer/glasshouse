@@ -3,12 +3,12 @@ const querystring = require("querystring");
 const generateRandomString = require('../../utils/generate-random-string')
 const request = require("request");
 const Cache = require("../../utils/cache");
+const {API_URL} = require("../../utils/settings");
 
 const CLIENT_ID = process.env.STRAVA_CLIENT_ID;
 const CLIENT_SECRET = process.env.STRAVA_CLIENT_SECRET;
 
-const BASE_URL = process.env.BASE_URL || 'http://localhost:' + (process.env.PORT || 8080)
-const REDIRECT_URI = BASE_URL + '/api/v1/strava/callback';
+const REDIRECT_URI = API_URL + '/api/v1/strava/callback';
 
 const cache = new Cache();
 

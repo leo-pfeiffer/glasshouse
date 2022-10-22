@@ -4,12 +4,12 @@ const querystring = require('querystring');
 const Cache = require('../../utils/cache')
 const generateRandomString = require('../../utils/generate-random-string')
 const cookie = require("cookie");
+const {API_URL} = require("../../utils/settings");
 
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;                      // Your client id
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;              // Your secret
 
-const BASE_URL = process.env.BASE_URL || 'http://localhost:' + (process.env.PORT || 8080)
-const REDIRECT_URI = BASE_URL + '/api/v1/spotify/callback'; // Your redirect uri
+const REDIRECT_URI = API_URL + '/api/v1/spotify/callback'; // Your redirect uri
 
 const cache = new Cache();
 

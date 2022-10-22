@@ -1,7 +1,7 @@
-const {BASE_URL} = require("@/api/settings");
+const {API_URL} = require("@/utils/settings");
 
 const retrieve = async function (days) {
-    let arr = await fetch(`${BASE_URL}/api/v1/strava/activities`)
+    let arr = await fetch(`${API_URL}/api/v1/strava/activities`)
         .then(res => res.json())
         .catch(() => [])
 

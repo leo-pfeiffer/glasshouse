@@ -1,6 +1,6 @@
 const axios = require("axios")
 const hashString = require('../../utils/hashing')
-const {getToday, minusOneMonth, secondsUntilEndOfDay} = require("../../utils/datetime");
+const {getToday, secondsUntilEndOfDay} = require("../../utils/datetime");
 const Cache = require("../../utils/cache");
 
 const cache = new Cache();

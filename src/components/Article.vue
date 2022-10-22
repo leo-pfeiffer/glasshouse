@@ -10,7 +10,6 @@
         </div>
       </div>
       <WakaTime v-if="type==='wakatime'" :content="content"/>
-      <Fitness v-else-if="type==='fitness'" :content="content"/>
       <Strava v-else-if="type==='strava'" :content="content"/>
       <Spotify v-else-if="type==='spotify'" :content="content"/>
       <Github v-else-if="type==='github'" :content="content"/>
@@ -20,7 +19,6 @@
 </template>
 
 <script>
-import Fitness from "@/components/Fitness";
 import WakaTime from "@/components/WakaTime";
 import Spotify from "@/components/Spotify";
 import Github from "@/components/Github";
@@ -31,7 +29,6 @@ export default {
   components: {
     Spotify,
     WakaTime,
-    Fitness,
     Strava,
     Github
   },

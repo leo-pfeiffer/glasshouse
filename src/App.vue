@@ -27,13 +27,6 @@
             type="strava"
         />
 
-<!--        <Article-->
-<!--            title="Apple Fitness"-->
-<!--            content="Workouts from the last 14 days."-->
-<!--            img="applefitness.png"-->
-<!--            type="fitness"-->
-<!--        />-->
-
         <Article
             title="WakaTime"
             content="Taking over the world with code"

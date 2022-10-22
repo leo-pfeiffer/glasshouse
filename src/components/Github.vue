@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import github from "@/api/github";
+import github from "@/api_client/github";
 import icons from "@/assets/icons";
 
 export default {

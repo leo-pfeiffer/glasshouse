@@ -1,4 +1,4 @@
-const mainService = require("../services/strava/main");
+const mainService = require("../api_services/strava/main");
 const {cors_headers} = require("../utils/cors");
 const {setCache, withCache} = require("../utils/redis-cache");
 

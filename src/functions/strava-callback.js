@@ -1,4 +1,4 @@
-const {callback} = require("../services/strava/auth");
+const {callback} = require("../api_services/strava/auth");
 
 module.exports.handler = async (event, context) => {
 

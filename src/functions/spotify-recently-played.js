@@ -1,4 +1,4 @@
-const mainService = require("../services/spotify/main");
+const mainService = require("../api_services/spotify/main");
 const {cors_headers} = require("../utils/cors");
 const {withCache, setCache} = require("../utils/redis-cache");
 

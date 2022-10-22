@@ -1,4 +1,4 @@
-const {login} = require("../services/spotify/auth");
+const {login} = require("../api_services/spotify/auth");
 
 module.exports.handler = async (event, context) => {
 

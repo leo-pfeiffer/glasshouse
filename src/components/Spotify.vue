@@ -69,7 +69,7 @@
 
 <script>
 import SpotifyItem from "@/components/SpotifyItem";
-import spotifyClient from "@/api/spotify";
+import spotifyClient from "@/api_client/spotify";
 export default {
   name: "Spotify",
   props: {

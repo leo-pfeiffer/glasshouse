@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import strava from "@/api/strava";
+import strava from "@/api_client/strava";
 
 export default {
   name: "Strava",

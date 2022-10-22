@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import wakatime from "@/api/wakatime";
+import wakatime from "@/api_client/wakatime";
 
 export default {
   name: "WakaTime",

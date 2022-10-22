@@ -1,4 +1,4 @@
-const {login} = require("../services/strava/auth");
+const {login} = require("../api_services/strava/auth");
 
 module.exports.handler = async (event, context) => {
 

@@ -1,4 +1,4 @@
-const {read} = require("../services/wakatime/main");
+const {read} = require("../api_services/wakatime/main");
 const {cors_headers} = require("../utils/cors");
 const {withCache, setCache} = require("../utils/redis-cache");
 

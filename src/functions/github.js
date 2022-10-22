@@ -1,4 +1,4 @@
-const {read} = require("../services/github/main");
+const {read} = require("../api_services/github/main");
 const {cors_headers} = require("../utils/cors");
 const {withCache, setCache} = require("../utils/redis-cache");
 

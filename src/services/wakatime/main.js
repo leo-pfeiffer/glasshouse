@@ -1,7 +1,6 @@
 require('dotenv').config()
 const {WakaTimeClient} = require('wakatime-client')
 const {RANGE} = require('wakatime-client');
-const {insertEntry} = require("../../db/dbconfig");
 const hashString = require('../../utils/hashing')
 const {getToday, secondsUntilEndOfDay} = require("../../utils/datetime");
 const Cache = require('../../utils/cache')
@@ -9,7 +8,6 @@ const Cache = require('../../utils/cache')
 const cache = new Cache();
 
 const API_KEY = process.env.WAKA_API_KEY
-const COLLECTION = process.env.WAKA_COLLECTION;
 
 const client = new WakaTimeClient(API_KEY);
 
@@ -63,16 +61,6 @@ const makeEntry = async function(date) {
 
 
 /**
- * Write new wakatime entries to the database.
- * */
-const write = function() {
-    makeEntry(getToday())
-        .then(entry => insertEntry(entry, COLLECTION))
-        .then(() => console.log("Success!"))
-        .catch((e) => console.error(e))
-}
-
-/**
  * Read wakatime entries from API or cache.
  * */
 const read = async function() {
@@ -87,7 +75,6 @@ const read = async function() {
 }
 
 module.exports = {
-    write: write,
     read: read
 };
 

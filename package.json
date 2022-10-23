@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "apexcharts": "^3.35.2",
-    "axios": ">=0.21.2",
+    "axios": "^0.19.2",
     "cookie": "^0.5.0",
     "core-js": "^3.6.5",
     "dotenv": "^8.2.0",

@@ -11,3 +11,6 @@
 /api/v1/strava/callback /.netlify/functions/strava-callback 200
 /api/v1/strava/athlete /.netlify/functions/strava-athlete 200
 /api/v1/strava/activities /.netlify/functions/strava-activities 200
+/api/v1/whoop/callback /.netlify/functions/whoop-callback 200
+/api/v1/whoop/login /.netlify/functions/whoop-login 200
+/api/v1/whoop/recovery /.netlify/functions/whoop-recovery 200

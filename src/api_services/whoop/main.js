@@ -44,6 +44,8 @@ const whoopClient = async function(url) {
 
 const getData = async function (url, ttl) {
 
+    url = "https://api.prod.whoop.com/developer/v1" + url
+
     const key = hashString(getToday().toString() + url)
 
     if (cache.has(key)) {
@@ -56,11 +58,30 @@ const getData = async function (url, ttl) {
 }
 
 const getRecovery = function() {
-    const url = 'https://api.prod.whoop.com/developer/v1/recovery'
+    const url = '/recovery'
     const ttl = secondsUntilEndOfDay()
     return getData(url, ttl)
 }
 
+const getSleep = function() {
+    const url = '/activity/sleep'
+    const ttl = secondsUntilEndOfDay()
+    return getData(url, ttl)
+}
+
+const getCycle = function() {
+    const url = '/cycle'
+    const ttl = secondsUntilEndOfDay()
+    return getData(url, ttl)
+}
+
+const getWorkout = function() {
+    const url = '/activity/workout'
+    const ttl = secondsUntilEndOfDay()
+    return getData(url, ttl)
+}
+
+
 module.exports = {
-    getRecovery
+    getRecovery, getSleep, getCycle, getWorkout
 }

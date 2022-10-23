@@ -14,3 +14,6 @@
 /api/v1/whoop/callback /.netlify/functions/whoop-callback 200
 /api/v1/whoop/login /.netlify/functions/whoop-login 200
 /api/v1/whoop/recovery /.netlify/functions/whoop-recovery 200
+/api/v1/whoop/cycle /.netlify/functions/whoop-cycle 200
+/api/v1/whoop/sleep /.netlify/functions/whoop-sleep 200
+/api/v1/whoop/workout /.netlify/functions/whoop-workout 200

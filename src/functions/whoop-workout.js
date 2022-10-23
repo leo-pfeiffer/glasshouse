@@ -4,7 +4,7 @@ const {setCache, withCache} = require("../utils/redis-cache");
 
 const whoopRecovery = async (event, context) => {
 
-    const data = await mainService.getRecovery();
+    const data = await mainService.getWorkout();
     await setCache(event.rawUrl, JSON.stringify(data), 3600)
 
     return {

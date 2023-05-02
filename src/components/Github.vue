@@ -45,7 +45,7 @@ import github from "@/api_client/github";
 import icons from "@/assets/icons";
 
 export default {
-  name: "WakaTime",
+  name: "Github",
   props: {
     content: String
   },

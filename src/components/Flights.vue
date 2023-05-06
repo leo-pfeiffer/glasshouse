@@ -12,11 +12,13 @@
         </l-feature-group>
       </l-map>
     </div>
+    <h2>Distance travelled: {{ Math.round(this.distanceTravelled / 1.609) }} mi</h2>
   </div>
 </template>
 
 <script>
 import flights from "@/api_client/flights";
+import coordinateDistance from "@/utils/distance";
 import { LMap, LTileLayer, LPolyline, LFeatureGroup } from 'vue2-leaflet';
 
 export default {
@@ -40,8 +42,25 @@ export default {
   },
   computed: {
     flightsLatLong: function() {
-      console.log(this.flightData)
-      return this.flightData
+      return this.filterValidFlights(this.flightData)
+        .map(flight => {
+          const origin = flight["Origin"]
+          const dest = flight["Destination"]
+          return [
+            [origin["latitude"], origin["longitude"]],
+            [dest["latitude"], dest["longitude"]]
+          ]
+        })
+    },
+    distanceTravelled: function() {
+      return this.flightsLatLong
+        .map(c => coordinateDistance(Number(c[0][0]), Number(c[0][1]), Number(c[1][0]), Number(c[1][1])))
+        .reduce((acc, cur) => acc + cur, 0)
+    }
+  },
+  methods: {
+    filterValidFlights: function(flights) {
+      return flights
         .filter(flight => {
           const origin = flight["Origin"]
           const dest = flight["Destination"]
@@ -57,17 +76,7 @@ export default {
             && "longitude" in dest
           )
         })
-        .map(flight => {
-          const origin = flight["Origin"]
-          const dest = flight["Destination"]
-          return [
-            [origin["latitude"], origin["longitude"]],
-            [dest["latitude"], dest["longitude"]]
-          ]
-        })
     }
-  },
-  methods: {
   },
   async mounted() {
     this.flightData = await flights.retrieve();

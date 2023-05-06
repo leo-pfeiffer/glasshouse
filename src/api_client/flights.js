@@ -1,5 +1,5 @@
 const retrieve = async function () {
-    return await fetch("/api/v1/github")
+    return await fetch("/api/v1/flights")
         .then((res) => {
             return res.json()
         })

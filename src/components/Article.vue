@@ -13,6 +13,7 @@
       <Strava v-else-if="type==='strava'" :content="content"/>
       <Spotify v-else-if="type==='spotify'" :content="content"/>
       <Github v-else-if="type==='github'" :content="content"/>
+      <Flights v-else-if="type==='flights'" :content="content"/>
       <div class="content article-body" v-else>{{ content }}</div>
     </div>
   </div>
@@ -23,6 +24,7 @@ import WakaTime from "@/components/WakaTime";
 import Spotify from "@/components/Spotify";
 import Github from "@/components/Github";
 import Strava from "@/components/Strava";
+import Flights from "@/components/Flights.vue";
 
 export default {
   name: "Article",
@@ -30,7 +32,8 @@ export default {
     Spotify,
     WakaTime,
     Strava,
-    Github
+    Github,
+    Flights
   },
   props: {
     title: String,

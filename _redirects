@@ -17,3 +17,4 @@
 /api/v1/whoop/cycle /.netlify/functions/whoop-cycle 200
 /api/v1/whoop/sleep /.netlify/functions/whoop-sleep 200
 /api/v1/whoop/workout /.netlify/functions/whoop-workout 200
+/api/v1/flights /.netlify/functions/flights 200

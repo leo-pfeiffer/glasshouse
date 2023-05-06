@@ -40,6 +40,13 @@
             img="github.png"
             type="github"
         />
+
+        <Article
+          title="Flights"
+          content="Travelling the world"
+          img="airplane.png"
+          type="flights"
+        />
       </div>
     </div>
     </div>

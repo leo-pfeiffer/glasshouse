@@ -6,6 +6,22 @@ const flights = async (event, context) => {
 
     const rawFlights = await getFlights()
 
+    // Some airport codes the API uses are incorrect. Fix them here.
+    const airportOverride = new Map();
+    airportOverride.set("BER", "SXF")
+
+    rawFlights.map(flight => {
+        const origin = flight["Origin"];
+        if (airportOverride.has(origin)) {
+            flight["Origin"] = airportOverride.get(origin)
+        }
+        const dest = flight["Destination"];
+        if (airportOverride.has(dest)) {
+            flight["Destination"] = airportOverride.get(dest)
+        }
+        return flight
+    })
+
     const uniqueAirports = Array.from(
         rawFlights
             .reduce((acc, cur) => {
